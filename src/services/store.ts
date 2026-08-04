@@ -34,6 +34,19 @@ export function useEmergencyStore() {
   const [selectedDistrict, setSelectedDistrict] = useState<DistrictName>('All Districts');
   const [activeTab, setActiveTab] = useState<'map' | 'feed' | 'camps' | 'forums' | 'contacts'>('map');
   const [language, setLanguage] = useState<'en' | 'ml'>('en');
+  const [currentUser, setCurrentUser] = useState<{ email: string; name?: string } | null>(() => {
+    const saved = localStorage.getItem('keralahub_user_v1');
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const handleSetUser = (user: { email: string; name?: string } | null) => {
+    setCurrentUser(user);
+    if (user) {
+      localStorage.setItem('keralahub_user_v1', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('keralahub_user_v1');
+    }
+  };
 
   // Save to LocalStorage on changes
   useEffect(() => {
@@ -196,6 +209,8 @@ export function useEmergencyStore() {
     setActiveTab,
     language,
     setLanguage,
+    currentUser,
+    setCurrentUser: handleSetUser,
     addSOSRequest,
     addDisasterReport,
     addForumPost,

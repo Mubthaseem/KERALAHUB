@@ -19,6 +19,8 @@ interface PhotoFeedProps {
   }) => void;
   onUpvoteReport: (id: string) => void;
   language: Language;
+  currentUser?: { email: string; name?: string } | null;
+  onOpenAuthModal?: () => void;
 }
 
 export const PhotoFeed: React.FC<PhotoFeedProps> = ({
@@ -27,7 +29,9 @@ export const PhotoFeed: React.FC<PhotoFeedProps> = ({
   onSelectDistrict,
   onAddReport,
   onUpvoteReport,
-  language
+  language,
+  currentUser,
+  onOpenAuthModal
 }) => {
   const t = TRANSLATIONS[language];
   const [showPostModal, setShowPostModal] = useState(false);
@@ -123,7 +127,13 @@ export const PhotoFeed: React.FC<PhotoFeedProps> = ({
         </div>
 
         <button
-          onClick={() => setShowPostModal(true)}
+          onClick={() => {
+            if (!currentUser && onOpenAuthModal) {
+              onOpenAuthModal();
+            } else {
+              setShowPostModal(true);
+            }
+          }}
           className="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-md shadow-red-600/30 transition"
         >
           <PlusCircle className="w-4 h-4" />

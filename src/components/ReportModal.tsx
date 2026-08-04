@@ -17,6 +17,7 @@ interface ReportModalProps {
     reporter_contact?: string;
   }) => void;
   selectedDistrict: DistrictName;
+  currentUser?: { email: string; name?: string } | null;
 }
 
 export const ReportModal: React.FC<ReportModalProps> = ({

@@ -20,6 +20,7 @@ interface SOSModalProps {
   }) => void;
   initialCoords?: { lat: number; lng: number } | null;
   selectedDistrict: DistrictName;
+  currentUser?: { email: string; name?: string } | null;
 }
 
 export const SOSModal: React.FC<SOSModalProps> = ({
@@ -27,9 +28,10 @@ export const SOSModal: React.FC<SOSModalProps> = ({
   onClose,
   onSubmitSOS,
   initialCoords,
-  selectedDistrict
+  selectedDistrict,
+  currentUser
 }) => {
-  const [name, setName] = useState('');
+  const [name, setName] = useState(currentUser?.name || '');
   const [phone, setPhone] = useState('');
   const [district, setDistrict] = useState<DistrictName>('Wayanad');
   const [locationName, setLocationName] = useState('');

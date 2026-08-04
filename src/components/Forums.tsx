@@ -15,7 +15,9 @@ interface ForumsProps {
     image_url?: string;
   }) => void;
   onAddComment: (postId: string, author: string, content: string) => void;
-  onUpvotePost: (postId: string) => void;
+  onUpvotePost: (id: string) => void;
+  currentUser?: { email: string; name?: string } | null;
+  onOpenAuthModal?: () => void;
 }
 
 export const Forums: React.FC<ForumsProps> = ({
@@ -24,7 +26,9 @@ export const Forums: React.FC<ForumsProps> = ({
   onSelectDistrict,
   onAddPost,
   onAddComment,
-  onUpvotePost
+  onUpvotePost,
+  currentUser,
+  onOpenAuthModal
 }) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('All');
@@ -99,11 +103,17 @@ export const Forums: React.FC<ForumsProps> = ({
         </div>
 
         <button
-          onClick={() => setShowCreateModal(true)}
-          className="bg-red-600 hover:bg-red-700 text-white font-mono font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-md shadow-red-600/30 transition shrink-0"
+          onClick={() => {
+            if (!currentUser && onOpenAuthModal) {
+              onOpenAuthModal();
+            } else {
+              setShowCreateModal(true);
+            }
+          }}
+          className="bg-red-600 hover:bg-red-700 text-white font-bold text-xs py-2 px-3.5 rounded-xl flex items-center gap-1.5 shadow-md shadow-red-600/30 transition whitespace-nowrap"
         >
           <PlusCircle className="w-4 h-4" />
-          <span>Start New Discussion Thread</span>
+          <span>Start Discussion</span>
         </button>
       </div>
 

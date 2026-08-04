@@ -15,6 +15,9 @@ interface NavbarProps {
   sosCount: number;
   language: Language;
   onToggleLanguage: (lang: Language) => void;
+  currentUser: { email: string; name?: string } | null;
+  onOpenAuthModal: () => void;
+  onSignOut: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -27,7 +30,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenBloggerModal,
   sosCount,
   language,
-  onToggleLanguage
+  onToggleLanguage,
+  currentUser,
+  onOpenAuthModal,
+  onSignOut
 }) => {
   const t = TRANSLATIONS[language];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -50,9 +56,30 @@ export const Navbar: React.FC<NavbarProps> = ({
           </span>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
-          {/* Language Switcher */}
-          <div className="flex items-center bg-slate-800 border border-slate-700 rounded p-0.5 text-[10px] sm:text-[11px]">
+        <div className="flex items-center gap-2">
+            {/* User Profile Badge or Login Button */}
+            {currentUser ? (
+              <div className="flex items-center gap-1.5 bg-slate-800 border border-slate-700 text-white px-2 py-0.5 rounded text-[11px]">
+                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span className="truncate max-w-[100px] font-bold">{currentUser.name || currentUser.email}</span>
+                <button
+                  onClick={onSignOut}
+                  className="text-slate-400 hover:text-red-400 ml-1 text-[10px]"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={onOpenAuthModal}
+                className="bg-slate-800 hover:bg-slate-700 text-white text-[11px] font-bold px-2 py-0.5 rounded border border-slate-700 transition flex items-center gap-1"
+              >
+                <span>Sign In</span>
+              </button>
+            )}
+
+            {/* Language Switcher */}
+            <div className="flex items-center bg-slate-800 border border-slate-700 rounded p-0.5 text-[10px] sm:text-[11px]">
             <button
               onClick={() => onToggleLanguage('en')}
               className={`px-1.5 py-0.5 rounded transition ${
