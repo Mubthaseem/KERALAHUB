@@ -32,7 +32,7 @@ export function useEmergencyStore() {
   });
 
   const [selectedDistrict, setSelectedDistrict] = useState<DistrictName>('All Districts');
-  const [activeTab, setActiveTab] = useState<'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'admin'>('map');
+  const [activeTab, setActiveTab] = useState<'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'ai' | 'profile' | 'admin'>('map');
   const [language, setLanguage] = useState<'en' | 'ml'>('en');
   const [currentUser, setCurrentUser] = useState<{ email: string; name?: string } | null>(() => {
     const saved = localStorage.getItem('keralahub_user_v1');

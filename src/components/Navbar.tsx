@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Tent, MessageSquare, PhoneCall, PlusCircle, ShieldAlert, Radio, HelpCircle, Shield, Menu, X, Camera, Briefcase, Calendar, ShieldCheck } from 'lucide-react';
+import { MapPin, Tent, MessageSquare, PhoneCall, PlusCircle, ShieldAlert, Radio, HelpCircle, Shield, Menu, X, Camera, Briefcase, Calendar, ShieldCheck, Bot, User } from 'lucide-react';
 import { DistrictName } from '../types';
 import { KERALA_DISTRICTS } from '../data/mockData';
 import { Language, TRANSLATIONS } from '../data/translations';
@@ -7,8 +7,8 @@ import { Language, TRANSLATIONS } from '../data/translations';
 interface NavbarProps {
   selectedDistrict: DistrictName;
   onSelectDistrict: (district: DistrictName) => void;
-  activeTab: 'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'admin';
-  onSelectTab: (tab: 'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'admin') => void;
+  activeTab: 'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'ai' | 'profile' | 'admin';
+  onSelectTab: (tab: 'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'ai' | 'profile' | 'admin') => void;
   onOpenSOSModal: () => void;
   onOpenReportModal: () => void;
   onOpenBloggerModal: () => void;
@@ -323,6 +323,30 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <PhoneCall className="w-4 h-4 shrink-0" />
             <span>{t.nav_contacts}</span>
+          </button>
+
+          <button
+            onClick={() => onSelectTab('ai')}
+            className={`px-3 sm:px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition whitespace-nowrap ${
+              activeTab === 'ai'
+                ? 'bg-emerald-600 text-white shadow-sm'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            }`}
+          >
+            <Bot className="w-4 h-4 shrink-0 text-amber-300" />
+            <span>{t.nav_ai}</span>
+          </button>
+
+          <button
+            onClick={() => onSelectTab('profile')}
+            className={`px-3 sm:px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition whitespace-nowrap ${
+              activeTab === 'profile'
+                ? 'bg-emerald-600 text-white shadow-sm'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            }`}
+          >
+            <User className="w-4 h-4 shrink-0" />
+            <span>{t.nav_profile}</span>
           </button>
 
           <button

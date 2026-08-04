@@ -13,6 +13,9 @@ import { PhotoFeed } from './components/PhotoFeed';
 import { MarketplaceJobs } from './components/MarketplaceJobs';
 import { EventsTourism } from './components/EventsTourism';
 import { AdminDashboard } from './components/AdminDashboard';
+import { AIAssistant } from './components/AIAssistant';
+import { UserProfileModal } from './components/UserProfileModal';
+import { BottomNav } from './components/BottomNav';
 
 export const App: React.FC = () => {
   const {
@@ -62,7 +65,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans flex flex-col selection:bg-red-600 selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans flex flex-col pb-16 md:pb-0 selection:bg-emerald-600 selection:text-white">
       
       {/* Navigation Header */}
       <Navbar
@@ -153,10 +156,26 @@ export const App: React.FC = () => {
           <EmergencyContacts />
         )}
 
+        {activeTab === 'ai' && (
+          <AIAssistant selectedDistrict={selectedDistrict} />
+        )}
+
+        {activeTab === 'profile' && (
+          <UserProfileModal currentUser={currentUser} reports={disasterReports} />
+        )}
+
         {activeTab === 'admin' && (
           <AdminDashboard currentUser={currentUser} />
         )}
       </main>
+
+      {/* Mobile Sticky Bottom Navigation Bar (Matching Mockup Image) */}
+      <BottomNav
+        activeTab={activeTab}
+        onSelectTab={setActiveTab}
+        onOpenCreateModal={() => requireAuth(() => setIsReportModalOpen(true))}
+        sosCount={sosRequests.filter(s => s.status === 'PENDING').length}
+      />
 
       {/* Emergency & Auth Modals */}
       <SOSModal
@@ -191,7 +210,7 @@ export const App: React.FC = () => {
       <footer className="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-500 font-sans">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <p>
-            © 2026 <strong>KERALAHUB.ONLINE</strong> • Kerala's Unified Digital Ecosystem & Emergency Response Hub
+            © 2026 <strong>KERALAHUB.ONLINE</strong> • The Digital Home of Kerala
           </p>
           <p className="text-[11px] text-slate-400">
             Powered by OpenStreetMap, Supabase Auth & Google Blogger Architecture
