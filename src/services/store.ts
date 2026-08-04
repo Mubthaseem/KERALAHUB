@@ -33,6 +33,7 @@ export function useEmergencyStore() {
 
   const [selectedDistrict, setSelectedDistrict] = useState<DistrictName>('All Districts');
   const [activeTab, setActiveTab] = useState<'map' | 'camps' | 'forums' | 'contacts'>('map');
+  const [language, setLanguage] = useState<'en' | 'ml'>('en');
 
   // Save to LocalStorage on changes
   useEffect(() => {
@@ -193,6 +194,8 @@ export function useEmergencyStore() {
     setSelectedDistrict,
     activeTab,
     setActiveTab,
+    language,
+    setLanguage,
     addSOSRequest,
     addDisasterReport,
     addForumPost,

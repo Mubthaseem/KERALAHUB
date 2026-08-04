@@ -19,6 +19,8 @@ export const App: React.FC = () => {
     setSelectedDistrict,
     activeTab,
     setActiveTab,
+    language,
+    setLanguage,
     addSOSRequest,
     addDisasterReport,
     addForumPost,
@@ -57,6 +59,8 @@ export const App: React.FC = () => {
         onOpenReportModal={() => setIsReportModalOpen(true)}
         onOpenBloggerModal={() => setIsBloggerModalOpen(true)}
         sosCount={sosRequests.filter(s => s.status === 'PENDING').length}
+        language={language}
+        onToggleLanguage={setLanguage}
       />
 
       {/* Main Content Body */}

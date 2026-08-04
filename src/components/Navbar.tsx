@@ -1,7 +1,8 @@
 import React from 'react';
-import { AlertTriangle, MapPin, Tent, MessageSquare, PhoneCall, PlusCircle, ShieldAlert, Radio, HelpCircle } from 'lucide-react';
+import { MapPin, Tent, MessageSquare, PhoneCall, PlusCircle, ShieldAlert, Radio, HelpCircle, Globe } from 'lucide-react';
 import { DistrictName } from '../types';
 import { KERALA_DISTRICTS } from '../data/mockData';
+import { Language, TRANSLATIONS } from '../data/translations';
 
 interface NavbarProps {
   selectedDistrict: DistrictName;
@@ -12,6 +13,8 @@ interface NavbarProps {
   onOpenReportModal: () => void;
   onOpenBloggerModal: () => void;
   sosCount: number;
+  language: Language;
+  onToggleLanguage: (lang: Language) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -22,8 +25,12 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSOSModal,
   onOpenReportModal,
   onOpenBloggerModal,
-  sosCount
+  sosCount,
+  language,
+  onToggleLanguage
 }) => {
+  const t = TRANSLATIONS[language];
+
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
       {/* Spider-Tracker Crisis Live Ticker */}
@@ -34,19 +41,42 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
           </span>
           <span className="font-bold text-red-400 tracking-wide uppercase flex items-center gap-1">
-            <Radio className="w-3.5 h-3.5 text-red-500 animate-pulse" /> SPIDER-TRACKER RADAR LIVE:
+            <Radio className="w-3.5 h-3.5 text-red-500 animate-pulse" /> SPIDER-RADAR:
           </span>
           <span className="truncate text-slate-300">
-            Waynad Chooralmala & Kuttanad Alappuzha emergency response active • {sosCount} Active Rescue Signals Pending
+            {t.sos_alert_ticker} • {sosCount} {t.sos_pending_count}
           </span>
         </div>
-        <button
-          onClick={onOpenBloggerModal}
-          className="hidden md:flex items-center gap-1 text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded text-[11px] font-mono border border-slate-700 transition"
-        >
-          <HelpCircle className="w-3 h-3 text-red-400" />
-          <span>$0 Blogger Deploy Guide</span>
-        </button>
+
+        <div className="flex items-center gap-2">
+          {/* Language Switcher */}
+          <div className="flex items-center bg-slate-800 border border-slate-700 rounded-md p-0.5 font-mono text-[11px]">
+            <button
+              onClick={() => onToggleLanguage('en')}
+              className={`px-2 py-0.5 rounded transition ${
+                language === 'en' ? 'bg-red-600 text-white font-bold' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              English
+            </button>
+            <button
+              onClick={() => onToggleLanguage('ml')}
+              className={`px-2 py-0.5 rounded transition ${
+                language === 'ml' ? 'bg-red-600 text-white font-bold' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              മലയാളം
+            </button>
+          </div>
+
+          <button
+            onClick={onOpenBloggerModal}
+            className="hidden md:flex items-center gap-1 text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded text-[11px] font-mono border border-slate-700 transition"
+          >
+            <HelpCircle className="w-3 h-3 text-red-400" />
+            <span>{t.btn_blogger_guide}</span>
+          </button>
+        </div>
       </div>
 
       {/* Main Header HUD */}
@@ -57,7 +87,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center text-white shadow-md shadow-red-500/20 border border-red-500">
-                {/* Spider Radar Web Icon */}
                 <svg className="w-6 h-6 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 2v20M2 12h20" strokeOpacity="0.4"/>
                   <circle cx="12" cy="12" r="9" strokeWidth="1.5"/>
@@ -71,11 +100,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                     KERALA<span className="text-red-600">HUB</span>.ONLINE
                   </h1>
                   <span className="bg-red-50 text-red-600 border border-red-200 text-[10px] font-mono font-bold px-1.5 py-0.5 rounded">
-                    SPIDER-RADAR V1
+                    V1
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 font-mono">
-                  Statewide Emergency Disaster Map & Community SOS
+                  {t.brand_subtitle}
                 </p>
               </div>
             </div>
@@ -104,7 +133,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 {KERALA_DISTRICTS.map((dist) => (
                   <option key={dist} value={dist}>
-                    {dist}
+                    {dist === 'All Districts' ? t.filter_all_districts : dist}
                   </option>
                 ))}
               </select>
@@ -116,7 +145,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3 py-2 rounded-lg flex items-center gap-1.5 transition border border-slate-800 shadow-sm"
             >
               <PlusCircle className="w-3.5 h-3.5 text-blue-400" />
-              <span>Report Hazard / Photo</span>
+              <span>{t.btn_report}</span>
             </button>
 
             {/* Desktop SOS Trigger */}
@@ -125,7 +154,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="hidden md:flex bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-4 py-2 rounded-lg items-center gap-2 shadow-md shadow-red-600/25 transition transform active:scale-95"
             >
               <ShieldAlert className="w-4 h-4 text-white animate-pulse" />
-              <span>DISPATCH EMERGENCY SOS</span>
+              <span>{t.btn_sos}</span>
             </button>
           </div>
 
@@ -142,7 +171,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <MapPin className="w-4 h-4" />
-            <span>Interactive Spider Radar Map</span>
+            <span>{t.nav_map}</span>
           </button>
 
           <button
@@ -154,7 +183,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <Tent className="w-4 h-4" />
-            <span>Relief Camps & Supplies</span>
+            <span>{t.nav_camps}</span>
           </button>
 
           <button
@@ -166,7 +195,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <MessageSquare className="w-4 h-4" />
-            <span>District Community Forums</span>
+            <span>{t.nav_forums}</span>
           </button>
 
           <button
@@ -178,7 +207,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <PhoneCall className="w-4 h-4" />
-            <span>Emergency Helplines</span>
+            <span>{t.nav_contacts}</span>
           </button>
         </div>
 
