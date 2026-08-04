@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import { SOSRequest, DisasterReport, ReliefCamp, DistrictName } from '../types';
-import { ShieldAlert, AlertTriangle, Tent, Phone, Users, MapPin, Eye, ThumbsUp, Filter } from 'lucide-react';
+import { ShieldAlert, AlertTriangle, Tent, Phone, Users, MapPin, Eye, ThumbsUp, Filter, Globe, Layers } from 'lucide-react';
 import { Language, TRANSLATIONS } from '../data/translations';
 
 interface InteractiveDisasterMapProps {
@@ -16,7 +16,23 @@ interface InteractiveDisasterMapProps {
   language: Language;
 }
 
-// Custom Leaflet Icons styled as Official Emergency Beacons
+export type MapTileMode = 'satellite' | 'street' | 'terrain';
+
+const TILE_LAYERS: Record<MapTileMode, { url: string; attribution: string }> = {
+  satellite: {
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+  },
+  street: {
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  },
+  terrain: {
+    url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+    attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, SRTM | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a>'
+  }
+};
+
 const createBeaconIcon = (type: 'sos' | 'flood' | 'camp') => {
   let iconHtml = '';
   if (type === 'sos') {
@@ -100,6 +116,7 @@ export const InteractiveDisasterMap: React.FC<InteractiveDisasterMapProps> = ({
   language
 }) => {
   const t = TRANSLATIONS[language];
+  const [mapMode, setMapMode] = useState<MapTileMode>('satellite'); // Default Satellite View
   const [showSOS, setShowSOS] = useState(true);
   const [showFloods, setShowFloods] = useState(true);
   const [showCamps, setShowCamps] = useState(true);
@@ -116,11 +133,39 @@ export const InteractiveDisasterMap: React.FC<InteractiveDisasterMapProps> = ({
   );
 
   return (
-    <div className="relative w-full h-[calc(100vh-140px)] min-h-[550px] bg-slate-100 border border-slate-200 rounded-xl overflow-hidden shadow-lg flex flex-col md:flex-row font-sans">
+    <div className="relative w-full h-[calc(100vh-140px)] min-h-[550px] bg-slate-900 border border-slate-200 rounded-xl overflow-hidden shadow-lg flex flex-col md:flex-row font-sans">
       
-      {/* Map Control Bar Overlay */}
+      {/* Map Control Bar & Tile Switcher Overlay */}
       <div className="absolute top-4 left-4 z-[500] flex flex-wrap items-center gap-2 bg-white/95 backdrop-blur-md p-2 rounded-xl border border-slate-200 shadow-md">
-        <div className="text-xs font-bold text-slate-700 px-2 flex items-center gap-1 border-r border-slate-200 pr-3">
+        
+        {/* Satellite / Map View Switcher */}
+        <div className="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs">
+          <button
+            onClick={() => setMapMode('satellite')}
+            className={`px-2.5 py-1 rounded-md font-bold transition flex items-center gap-1 ${
+              mapMode === 'satellite'
+                ? 'bg-slate-900 text-white shadow-sm'
+                : 'text-slate-700 hover:text-slate-900'
+            }`}
+          >
+            <Globe className="w-3.5 h-3.5 text-blue-400" />
+            <span>🛰️ Satellite</span>
+          </button>
+
+          <button
+            onClick={() => setMapMode('street')}
+            className={`px-2.5 py-1 rounded-md font-bold transition flex items-center gap-1 ${
+              mapMode === 'street'
+                ? 'bg-slate-900 text-white shadow-sm'
+                : 'text-slate-700 hover:text-slate-900'
+            }`}
+          >
+            <MapPin className="w-3.5 h-3.5 text-red-500" />
+            <span>🗺️ Street</span>
+          </button>
+        </div>
+
+        <div className="text-xs font-bold text-slate-700 px-2 flex items-center gap-1 border-r border-slate-200 pr-3 hidden sm:flex">
           <Filter className="w-3.5 h-3.5 text-red-600" />
           <span>{t.radar_layers}</span>
         </div>
@@ -192,9 +237,12 @@ export const InteractiveDisasterMap: React.FC<InteractiveDisasterMapProps> = ({
             <MapEventsHandler onMapClick={onOpenSOSModalWithCoords} />
           )}
 
+          {/* Dynamic Map Tile Layer (Satellite / Street / Terrain) */}
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            key={mapMode}
+            url={TILE_LAYERS[mapMode].url}
+            attribution={TILE_LAYERS[mapMode].attribution}
+            maxZoom={19}
           />
 
           {/* Render SOS Pins */}
