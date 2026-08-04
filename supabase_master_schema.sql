@@ -1,4 +1,4 @@
--- KERALAHUB.ONLINE MASTER SUPABASE POSTGRESQL SCHEMA (100% FREE TIER COMPATIBLE)
+-- KERALAHUB.ONLINE MASTER SUPABASE POSTGRESQL SCHEMA (100% SAFE RE-RUNNABLE)
 
 -- Enable PostGIS & UUID Extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   district TEXT DEFAULT 'Wayanad',
   panchayat TEXT,
   ward TEXT,
-  role TEXT DEFAULT 'Citizen', -- 'Citizen', 'Verified Citizen', 'Volunteer', 'Doctor', 'NGO', 'Business', 'Govt Official', 'Admin'
+  role TEXT DEFAULT 'Citizen',
   trust_score INTEGER DEFAULT 100,
   badges TEXT[] DEFAULT ARRAY['Citizen Volunteer'],
   is_verified BOOLEAN DEFAULT FALSE,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS public.posts (
   author_avatar TEXT,
   district TEXT NOT NULL,
   panchayat TEXT,
-  category TEXT DEFAULT 'Community', -- 'Emergency', 'Community', 'News', 'Poll', 'Alert'
+  category TEXT DEFAULT 'Community',
   content TEXT NOT NULL,
   media_urls TEXT[] DEFAULT ARRAY[]::TEXT[],
   hashtags TEXT[] DEFAULT ARRAY[]::TEXT[],
@@ -74,10 +74,10 @@ CREATE TABLE IF NOT EXISTS public.sos_requests (
   location_name TEXT NOT NULL,
   lat DOUBLE PRECISION NOT NULL,
   lng DOUBLE PRECISION NOT NULL,
-  category TEXT NOT NULL, -- 'Evacuation', 'Medical Emergency', 'Food & Water', 'Rescue Boat'
-  urgency TEXT NOT NULL, -- 'CRITICAL', 'HIGH', 'MEDIUM'
+  category TEXT NOT NULL,
+  urgency TEXT NOT NULL,
   details TEXT NOT NULL,
-  status TEXT DEFAULT 'PENDING', -- 'PENDING', 'IN_PROGRESS', 'RESOLVED'
+  status TEXT DEFAULT 'PENDING',
   people_count INTEGER DEFAULT 1,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS public.relief_camps (
   current_occupancy INTEGER DEFAULT 0,
   max_capacity INTEGER NOT NULL,
   needed_supplies TEXT[] DEFAULT ARRAY[]::TEXT[],
-  status TEXT DEFAULT 'OPEN', -- 'OPEN', 'FULL', 'CLOSED'
+  status TEXT DEFAULT 'OPEN',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -107,8 +107,8 @@ CREATE TABLE IF NOT EXISTS public.marketplace (
   seller_phone TEXT NOT NULL,
   district TEXT NOT NULL,
   title TEXT NOT NULL,
-  category TEXT NOT NULL, -- 'Free Goods', 'Rentals', 'Used Electronics', 'Vehicles', 'PG & Hostels'
-  price TEXT NOT NULL, -- 'FREE', '₹500/mo', etc.
+  category TEXT NOT NULL,
+  price TEXT NOT NULL,
   description TEXT NOT NULL,
   image_urls TEXT[] DEFAULT ARRAY[]::TEXT[],
   is_available BOOLEAN DEFAULT TRUE,
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS public.jobs (
   company_name TEXT NOT NULL,
   title TEXT NOT NULL,
   district TEXT NOT NULL,
-  job_type TEXT NOT NULL, -- 'Government', 'Private', 'Part-time', 'Freelance', 'Remote'
+  job_type TEXT NOT NULL,
   salary TEXT NOT NULL,
   description TEXT NOT NULL,
   contact_email TEXT NOT NULL,
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS public.events (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   title TEXT NOT NULL,
   district TEXT NOT NULL,
-  category TEXT NOT NULL, -- 'Festival', 'Tech Meetup', 'Sports', 'Volunteer Drive', 'Tourism'
+  category TEXT NOT NULL,
   event_date TIMESTAMPTZ NOT NULL,
   location_name TEXT NOT NULL,
   description TEXT NOT NULL,
@@ -143,14 +143,25 @@ CREATE TABLE IF NOT EXISTS public.events (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ROW LEVEL SECURITY (RLS) POLICIES
+-- ENABLE ROW LEVEL SECURITY (RLS)
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.sos_requests ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.relief_camps ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.marketplace ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.jobs ENABLE ROW LEVEL SECURITY;
 
--- Allow public read access to all feeds
+-- SAFE DROP EXISTING POLICIES TO PREVENT ERROR 42710
+DROP POLICY IF EXISTS "Public Read Profiles" ON public.profiles;
+DROP POLICY IF EXISTS "Public Read Posts" ON public.posts;
+DROP POLICY IF EXISTS "Public Read SOS" ON public.sos_requests;
+DROP POLICY IF EXISTS "Public Read Camps" ON public.relief_camps;
+DROP POLICY IF EXISTS "Public Read Marketplace" ON public.marketplace;
+DROP POLICY IF EXISTS "Public Read Jobs" ON public.jobs;
+DROP POLICY IF EXISTS "User Create Post" ON public.posts;
+DROP POLICY IF EXISTS "User Create SOS" ON public.sos_requests;
+
+-- RE-CREATE RLS POLICIES CLEANLY
 CREATE POLICY "Public Read Profiles" ON public.profiles FOR SELECT USING (true);
 CREATE POLICY "Public Read Posts" ON public.posts FOR SELECT USING (true);
 CREATE POLICY "Public Read SOS" ON public.sos_requests FOR SELECT USING (true);
@@ -158,6 +169,5 @@ CREATE POLICY "Public Read Camps" ON public.relief_camps FOR SELECT USING (true)
 CREATE POLICY "Public Read Marketplace" ON public.marketplace FOR SELECT USING (true);
 CREATE POLICY "Public Read Jobs" ON public.jobs FOR SELECT USING (true);
 
--- Allow authenticated users to insert posts and SOS requests
-CREATE POLICY "User Create Post" ON public.posts FOR INSERT WITH CHECK (auth.role() = 'authenticated' OR true);
+CREATE POLICY "User Create Post" ON public.posts FOR INSERT WITH CHECK (true);
 CREATE POLICY "User Create SOS" ON public.sos_requests FOR INSERT WITH CHECK (true);
