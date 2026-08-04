@@ -9,6 +9,8 @@ import { Forums } from './components/Forums';
 import { EmergencyContacts } from './components/EmergencyContacts';
 import { BloggerGuideModal } from './components/BloggerGuideModal';
 
+import { PhotoFeed } from './components/PhotoFeed';
+
 export const App: React.FC = () => {
   const {
     sosRequests,
@@ -73,6 +75,17 @@ export const App: React.FC = () => {
             selectedDistrict={selectedDistrict}
             onSelectDistrict={setSelectedDistrict}
             onOpenSOSModalWithCoords={handleOpenSOSWithCoords}
+            onUpvoteReport={upvoteReport}
+            language={language}
+          />
+        )}
+
+        {activeTab === 'feed' && (
+          <PhotoFeed
+            reports={disasterReports}
+            selectedDistrict={selectedDistrict}
+            onSelectDistrict={setSelectedDistrict}
+            onAddReport={addDisasterReport}
             onUpvoteReport={upvoteReport}
             language={language}
           />

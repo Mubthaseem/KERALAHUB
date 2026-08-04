@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Tent, MessageSquare, PhoneCall, PlusCircle, ShieldAlert, Radio, HelpCircle, Shield, Menu, X } from 'lucide-react';
+import { MapPin, Tent, MessageSquare, PhoneCall, PlusCircle, ShieldAlert, Radio, HelpCircle, Shield, Menu, X, Camera } from 'lucide-react';
 import { DistrictName } from '../types';
 import { KERALA_DISTRICTS } from '../data/mockData';
 import { Language, TRANSLATIONS } from '../data/translations';
@@ -7,8 +7,8 @@ import { Language, TRANSLATIONS } from '../data/translations';
 interface NavbarProps {
   selectedDistrict: DistrictName;
   onSelectDistrict: (district: DistrictName) => void;
-  activeTab: 'map' | 'camps' | 'forums' | 'contacts';
-  onSelectTab: (tab: 'map' | 'camps' | 'forums' | 'contacts') => void;
+  activeTab: 'map' | 'feed' | 'camps' | 'forums' | 'contacts';
+  onSelectTab: (tab: 'map' | 'feed' | 'camps' | 'forums' | 'contacts') => void;
   onOpenSOSModal: () => void;
   onOpenReportModal: () => void;
   onOpenBloggerModal: () => void;
@@ -224,6 +224,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <MapPin className="w-4 h-4 shrink-0" />
             <span>{t.nav_map}</span>
+          </button>
+
+          <button
+            onClick={() => onSelectTab('feed')}
+            className={`px-3 sm:px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition whitespace-nowrap ${
+              activeTab === 'feed'
+                ? 'bg-red-600 text-white shadow-sm'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            }`}
+          >
+            <Camera className="w-4 h-4 shrink-0" />
+            <span>{t.nav_feed}</span>
           </button>
 
           <button

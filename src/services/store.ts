@@ -32,7 +32,7 @@ export function useEmergencyStore() {
   });
 
   const [selectedDistrict, setSelectedDistrict] = useState<DistrictName>('All Districts');
-  const [activeTab, setActiveTab] = useState<'map' | 'camps' | 'forums' | 'contacts'>('map');
+  const [activeTab, setActiveTab] = useState<'map' | 'feed' | 'camps' | 'forums' | 'contacts'>('map');
   const [language, setLanguage] = useState<'en' | 'ml'>('en');
 
   // Save to LocalStorage on changes
