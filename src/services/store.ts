@@ -31,9 +31,37 @@ export function useEmergencyStore() {
     return saved ? JSON.parse(saved) : INITIAL_FORUM_POSTS;
   });
 
+  const getInitialTab = (): 'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'ai' | 'profile' | 'admin' => {
+    const hash = window.location.hash.replace('#/', '').replace('#', '');
+    const validTabs = ['map', 'feed', 'jobs', 'events', 'camps', 'forums', 'contacts', 'ai', 'profile', 'admin'];
+    return validTabs.includes(hash) ? (hash as any) : 'feed';
+  };
+
   const [selectedDistrict, setSelectedDistrict] = useState<DistrictName>('All Districts');
-  const [activeTab, setActiveTab] = useState<'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'ai' | 'profile' | 'admin'>('map');
+  const [activeTab, setActiveTabState] = useState<'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'ai' | 'profile' | 'admin'>(getInitialTab);
   const [language, setLanguage] = useState<'en' | 'ml'>('en');
+
+  const setActiveTab = (tab: 'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'ai' | 'profile' | 'admin') => {
+    setActiveTabState(tab);
+    window.location.hash = `#/${tab}`;
+  };
+
+  // Sync window.location.hash changes (back/forward browser buttons)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#/', '').replace('#', '');
+      const validTabs = ['map', 'feed', 'jobs', 'events', 'camps', 'forums', 'contacts', 'ai', 'profile', 'admin'];
+      if (validTabs.includes(hash)) {
+        setActiveTabState(hash as any);
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    if (!window.location.hash) {
+      window.location.hash = '#/feed';
+    }
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
   const [currentUser, setCurrentUser] = useState<{ email: string; name?: string } | null>(() => {
     const saved = localStorage.getItem('keralahub_user_v1');
     return saved ? JSON.parse(saved) : null;
