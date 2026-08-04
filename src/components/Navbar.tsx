@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Tent, MessageSquare, PhoneCall, PlusCircle, ShieldAlert, Radio, HelpCircle, Shield, Menu, X, Camera } from 'lucide-react';
+import { MapPin, Tent, MessageSquare, PhoneCall, PlusCircle, ShieldAlert, Radio, HelpCircle, Shield, Menu, X, Camera, Briefcase, Calendar, ShieldCheck } from 'lucide-react';
 import { DistrictName } from '../types';
 import { KERALA_DISTRICTS } from '../data/mockData';
 import { Language, TRANSLATIONS } from '../data/translations';
@@ -7,8 +7,8 @@ import { Language, TRANSLATIONS } from '../data/translations';
 interface NavbarProps {
   selectedDistrict: DistrictName;
   onSelectDistrict: (district: DistrictName) => void;
-  activeTab: 'map' | 'feed' | 'camps' | 'forums' | 'contacts';
-  onSelectTab: (tab: 'map' | 'feed' | 'camps' | 'forums' | 'contacts') => void;
+  activeTab: 'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'admin';
+  onSelectTab: (tab: 'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'admin') => void;
   onOpenSOSModal: () => void;
   onOpenReportModal: () => void;
   onOpenBloggerModal: () => void;
@@ -266,6 +266,30 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
 
           <button
+            onClick={() => onSelectTab('jobs')}
+            className={`px-3 sm:px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition whitespace-nowrap ${
+              activeTab === 'jobs'
+                ? 'bg-red-600 text-white shadow-sm'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            }`}
+          >
+            <Briefcase className="w-4 h-4 shrink-0" />
+            <span>{t.nav_jobs}</span>
+          </button>
+
+          <button
+            onClick={() => onSelectTab('events')}
+            className={`px-3 sm:px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition whitespace-nowrap ${
+              activeTab === 'events'
+                ? 'bg-red-600 text-white shadow-sm'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            }`}
+          >
+            <Calendar className="w-4 h-4 shrink-0" />
+            <span>{t.nav_events}</span>
+          </button>
+
+          <button
             onClick={() => onSelectTab('camps')}
             className={`px-3 sm:px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition whitespace-nowrap ${
               activeTab === 'camps'
@@ -299,6 +323,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <PhoneCall className="w-4 h-4 shrink-0" />
             <span>{t.nav_contacts}</span>
+          </button>
+
+          <button
+            onClick={() => onSelectTab('admin')}
+            className={`px-3 sm:px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition whitespace-nowrap ${
+              activeTab === 'admin'
+                ? 'bg-slate-900 text-white shadow-sm'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            }`}
+          >
+            <ShieldCheck className="w-4 h-4 shrink-0 text-amber-400" />
+            <span>{t.nav_admin}</span>
           </button>
         </div>
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { SOSRequest, DisasterReport, ReliefCamp, ForumPost, DistrictName } from '../types';
+import { SOSRequest, DisasterReport, ReliefCamp, ForumPost, ForumComment, DistrictName } from '../types';
 import { INITIAL_SOS_REQUESTS, INITIAL_DISASTER_REPORTS, INITIAL_RELIEF_CAMPS, INITIAL_FORUM_POSTS } from '../data/mockData';
 import { supabase, isSupabaseConfigured } from './supabase';
 
@@ -32,7 +32,7 @@ export function useEmergencyStore() {
   });
 
   const [selectedDistrict, setSelectedDistrict] = useState<DistrictName>('All Districts');
-  const [activeTab, setActiveTab] = useState<'map' | 'feed' | 'camps' | 'forums' | 'contacts'>('map');
+  const [activeTab, setActiveTab] = useState<'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'admin'>('map');
   const [language, setLanguage] = useState<'en' | 'ml'>('en');
   const [currentUser, setCurrentUser] = useState<{ email: string; name?: string } | null>(() => {
     const saved = localStorage.getItem('keralahub_user_v1');
@@ -164,21 +164,20 @@ export function useEmergencyStore() {
     }
   };
 
-  const addForumComment = (postId: string, author: string, content: string) => {
+  const addForumComment = (postId: string, authorName: string, content: string) => {
     setForumPosts((prev) =>
       prev.map((post) => {
         if (post.id === postId) {
+          const newComment: ForumComment = {
+            id: Date.now().toString(),
+            author: authorName,
+            author_name: authorName,
+            content,
+            created_at: new Date().toISOString()
+          };
           return {
             ...post,
-            comments: [
-              ...post.comments,
-              {
-                id: 'c-' + Date.now(),
-                author,
-                content,
-                created_at: new Date().toISOString()
-              }
-            ]
+            comments: [...post.comments, newComment]
           };
         }
         return post;

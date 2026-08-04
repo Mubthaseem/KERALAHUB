@@ -10,6 +10,9 @@ import { EmergencyContacts } from './components/EmergencyContacts';
 import { BloggerGuideModal } from './components/BloggerGuideModal';
 import { AuthModal } from './components/AuthModal';
 import { PhotoFeed } from './components/PhotoFeed';
+import { MarketplaceJobs } from './components/MarketplaceJobs';
+import { EventsTourism } from './components/EventsTourism';
+import { AdminDashboard } from './components/AdminDashboard';
 
 export const App: React.FC = () => {
   const {
@@ -39,7 +42,6 @@ export const App: React.FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [mapSOSCoords, setMapSOSCoords] = useState<{ lat: number; lng: number } | null>(null);
 
-  // Auth Protection Guard
   const requireAuth = (action: () => void) => {
     if (!currentUser) {
       setIsAuthModalOpen(true);
@@ -62,7 +64,7 @@ export const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans flex flex-col selection:bg-red-600 selection:text-white">
       
-      {/* Navigation & Header */}
+      {/* Navigation Header */}
       <Navbar
         selectedDistrict={selectedDistrict}
         onSelectDistrict={setSelectedDistrict}
@@ -107,6 +109,24 @@ export const App: React.FC = () => {
           />
         )}
 
+        {activeTab === 'jobs' && (
+          <MarketplaceJobs
+            selectedDistrict={selectedDistrict}
+            onSelectDistrict={setSelectedDistrict}
+            language={language}
+            currentUser={currentUser}
+            onOpenAuthModal={() => setIsAuthModalOpen(true)}
+          />
+        )}
+
+        {activeTab === 'events' && (
+          <EventsTourism
+            selectedDistrict={selectedDistrict}
+            onSelectDistrict={setSelectedDistrict}
+            language={language}
+          />
+        )}
+
         {activeTab === 'camps' && (
           <ReliefCamps
             camps={reliefCamps}
@@ -132,9 +152,13 @@ export const App: React.FC = () => {
         {activeTab === 'contacts' && (
           <EmergencyContacts />
         )}
+
+        {activeTab === 'admin' && (
+          <AdminDashboard currentUser={currentUser} />
+        )}
       </main>
 
-      {/* Emergency Response & Auth Modals */}
+      {/* Emergency & Auth Modals */}
       <SOSModal
         isOpen={isSOSModalOpen}
         onClose={() => setIsSOSModalOpen(false)}
@@ -167,7 +191,7 @@ export const App: React.FC = () => {
       <footer className="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-500 font-sans">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <p>
-            © 2026 <strong>KERALAHUB.ONLINE</strong> • Emergency Disaster Relief & Community SOS Portal
+            © 2026 <strong>KERALAHUB.ONLINE</strong> • Kerala's Unified Digital Ecosystem & Emergency Response Hub
           </p>
           <p className="text-[11px] text-slate-400">
             Powered by OpenStreetMap, Supabase Auth & Google Blogger Architecture
