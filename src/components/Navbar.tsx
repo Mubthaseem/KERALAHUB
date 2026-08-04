@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Tent, MessageSquare, PhoneCall, PlusCircle, ShieldAlert, Radio, HelpCircle, Globe } from 'lucide-react';
+import { MapPin, Tent, MessageSquare, PhoneCall, PlusCircle, ShieldAlert, Radio, HelpCircle, Shield, AlertTriangle } from 'lucide-react';
 import { DistrictName } from '../types';
 import { KERALA_DISTRICTS } from '../data/mockData';
 import { Language, TRANSLATIONS } from '../data/translations';
@@ -32,16 +32,16 @@ export const Navbar: React.FC<NavbarProps> = ({
   const t = TRANSLATIONS[language];
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
-      {/* Spider-Tracker Crisis Live Ticker */}
-      <div className="bg-slate-900 text-white px-4 py-1.5 text-xs font-mono flex items-center justify-between border-b border-red-900/40">
+    <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm font-sans">
+      {/* Official Crisis Live Ticker */}
+      <div className="bg-slate-900 text-white px-4 py-1.5 text-xs flex items-center justify-between border-b border-red-900/40">
         <div className="flex items-center gap-2 overflow-hidden">
           <span className="flex h-2 w-2 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
           </span>
           <span className="font-bold text-red-400 tracking-wide uppercase flex items-center gap-1">
-            <Radio className="w-3.5 h-3.5 text-red-500 animate-pulse" /> SPIDER-RADAR:
+            <Radio className="w-3.5 h-3.5 text-red-500 animate-pulse" /> LIVE ALERT:
           </span>
           <span className="truncate text-slate-300">
             {t.sos_alert_ticker} • {sosCount} {t.sos_pending_count}
@@ -50,7 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         <div className="flex items-center gap-2">
           {/* Language Switcher */}
-          <div className="flex items-center bg-slate-800 border border-slate-700 rounded-md p-0.5 font-mono text-[11px]">
+          <div className="flex items-center bg-slate-800 border border-slate-700 rounded-md p-0.5 text-[11px]">
             <button
               onClick={() => onToggleLanguage('en')}
               className={`px-2 py-0.5 rounded transition ${
@@ -71,7 +71,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <button
             onClick={onOpenBloggerModal}
-            className="hidden md:flex items-center gap-1 text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded text-[11px] font-mono border border-slate-700 transition"
+            className="hidden md:flex items-center gap-1 text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded text-[11px] border border-slate-700 transition"
           >
             <HelpCircle className="w-3 h-3 text-red-400" />
             <span>{t.btn_blogger_guide}</span>
@@ -83,27 +83,22 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           
-          {/* Brand & Spider HUD Logo */}
+          {/* Official Brand Logo */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center text-white shadow-md shadow-red-500/20 border border-red-500">
-                <svg className="w-6 h-6 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2v20M2 12h20" strokeOpacity="0.4"/>
-                  <circle cx="12" cy="12" r="9" strokeWidth="1.5"/>
-                  <circle cx="12" cy="12" r="5" strokeWidth="1.5"/>
-                  <circle cx="12" cy="12" r="2" fill="currentColor"/>
-                </svg>
+              <div className="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center text-white shadow-md shadow-red-600/20 border border-red-500">
+                <Shield className="w-6 h-6" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl font-bold font-mono text-slate-900 tracking-tight flex items-center gap-1.5">
+                  <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-1">
                     KERALA<span className="text-red-600">HUB</span>.ONLINE
                   </h1>
-                  <span className="bg-red-50 text-red-600 border border-red-200 text-[10px] font-mono font-bold px-1.5 py-0.5 rounded">
-                    V1
+                  <span className="bg-red-50 text-red-700 border border-red-200 text-[10px] font-bold px-1.5 py-0.5 rounded">
+                    EMERGENCY
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 font-mono">
+                <p className="text-xs text-slate-500">
                   {t.brand_subtitle}
                 </p>
               </div>
@@ -124,7 +119,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* District Selector & Action Buttons */}
           <div className="flex flex-wrap items-center gap-2.5">
             {/* District Filter Dropdown */}
-            <div className="flex items-center gap-1.5 bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-mono text-slate-700">
+            <div className="flex items-center gap-1.5 bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700">
               <MapPin className="w-3.5 h-3.5 text-red-600" />
               <select
                 value={selectedDistrict}
@@ -142,7 +137,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Report Photo Button */}
             <button
               onClick={onOpenReportModal}
-              className="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3 py-2 rounded-lg flex items-center gap-1.5 transition border border-slate-800 shadow-sm"
+              className="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition border border-slate-800 shadow-sm"
             >
               <PlusCircle className="w-3.5 h-3.5 text-blue-400" />
               <span>{t.btn_report}</span>
@@ -164,7 +159,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center gap-1 mt-4 border-t border-slate-100 pt-2 overflow-x-auto no-scrollbar">
           <button
             onClick={() => onSelectTab('map')}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold font-mono flex items-center gap-2 transition whitespace-nowrap ${
+            className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'map'
                 ? 'bg-red-600 text-white shadow-sm'
                 : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
@@ -176,7 +171,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <button
             onClick={() => onSelectTab('camps')}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold font-mono flex items-center gap-2 transition whitespace-nowrap ${
+            className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'camps'
                 ? 'bg-red-600 text-white shadow-sm'
                 : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
@@ -188,7 +183,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <button
             onClick={() => onSelectTab('forums')}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold font-mono flex items-center gap-2 transition whitespace-nowrap ${
+            className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'forums'
                 ? 'bg-red-600 text-white shadow-sm'
                 : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
@@ -200,7 +195,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <button
             onClick={() => onSelectTab('contacts')}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold font-mono flex items-center gap-2 transition whitespace-nowrap ${
+            className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'contacts'
                 ? 'bg-red-600 text-white shadow-sm'
                 : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'

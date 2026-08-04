@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useEmergencyStore } from './services/store';
 import { Navbar } from './components/Navbar';
-import { InteractiveSpiderMap } from './components/InteractiveSpiderMap';
+import { InteractiveDisasterMap } from './components/InteractiveDisasterMap';
 import { SOSModal } from './components/SOSModal';
 import { ReportModal } from './components/ReportModal';
 import { ReliefCamps } from './components/ReliefCamps';
@@ -44,7 +44,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans flex flex-col selection:bg-red-500 selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans flex flex-col selection:bg-red-600 selection:text-white">
       
       {/* Navigation & Radar Header */}
       <Navbar
@@ -64,9 +64,9 @@ export const App: React.FC = () => {
       />
 
       {/* Main Content Body */}
-      <main className="flex-1 p-3 sm:p-4 max-w-7xl mx-auto w-full">
+      <main className="flex-1 p-3 sm:p-4 max-w-7xl mx-auto w-full font-sans">
         {activeTab === 'map' && (
-          <InteractiveSpiderMap
+          <InteractiveDisasterMap
             sosRequests={sosRequests}
             disasterReports={disasterReports}
             reliefCamps={reliefCamps}
@@ -74,6 +74,7 @@ export const App: React.FC = () => {
             onSelectDistrict={setSelectedDistrict}
             onOpenSOSModalWithCoords={handleOpenSOSWithCoords}
             onUpvoteReport={upvoteReport}
+            language={language}
           />
         )}
 
@@ -102,7 +103,7 @@ export const App: React.FC = () => {
         )}
       </main>
 
-      {/* Spider Radar Modals */}
+      {/* Emergency Response Modals */}
       <SOSModal
         isOpen={isSOSModalOpen}
         onClose={() => setIsSOSModalOpen(false)}
@@ -124,13 +125,13 @@ export const App: React.FC = () => {
       />
 
       {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 py-4 px-4 text-center font-mono text-xs text-slate-500">
+      <footer className="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-500 font-sans">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <p>
-            © 2026 <strong>KERALAHUB.ONLINE</strong> • Community Disaster Relief & SOS Radar
+            © 2026 <strong>KERALAHUB.ONLINE</strong> • Statewide Emergency Disaster Relief & Community SOS Hub
           </p>
           <p className="text-[11px] text-slate-400">
-            Powered by 100% Free OpenStreetMap, Supabase & Google Blogger Architecture
+            Powered by OpenStreetMap, Supabase & Google Blogger Architecture
           </p>
         </div>
       </footer>

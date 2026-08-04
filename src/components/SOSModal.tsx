@@ -315,7 +315,7 @@ export const SOSModal: React.FC<SOSModalProps> = ({
               className="w-full bg-red-600 hover:bg-red-700 text-white font-mono font-bold text-sm py-3 rounded-xl shadow-lg shadow-red-600/30 flex items-center justify-center gap-2 transition active:scale-98"
             >
               <ShieldAlert className="w-4 h-4 animate-pulse" />
-              <span>BROADCAST SPIDER SOS SIGNAL NOW</span>
+              <span>BROADCAST EMERGENCY SOS SIGNAL NOW</span>
             </button>
           </div>
 
