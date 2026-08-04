@@ -21,35 +21,36 @@ html = html.replace(/\bdefer\b(?!\s*=)/gi, 'defer="defer"');
 html = html.replace(/<link([^>]*)(?<!\/)>/gi, '<link$1 />');
 html = html.replace(/<meta([^>]*)(?<!\/)>/gi, '<meta$1 />');
 
-// 3. Extract script contents and wrap in Blogger official //<![CDATA[ ... //]]>
+// 3. Extract script contents and escape all '<' and '>' to unicode (\u003c & \u003e) for SAX parser safety
 html = html.replace(/<script([^>]*)>([\s\S]*?)<\/script>/gi, (match, attrs, code) => {
   if (!code.trim()) return match;
   
-  // Clean attributes for XML
   let cleanAttrs = attrs
     .replace(/\bcrossorigin\b(?!\s*=)/gi, 'crossorigin="anonymous"')
     .replace(/\basync\b(?!\s*=)/gi, 'async="async"')
     .replace(/\bdefer\b(?!\s*=)/gi, 'defer="defer"');
   
-  // Ensure type='text/javascript'
   if (!cleanAttrs.includes('type=')) {
     cleanAttrs += ' type="text/javascript"';
   }
+
+  // Escape XML-sensitive characters in JS code using JS Unicode escapes
+  // \u003c for '<', \u003e for '>', \u0026 for '&'
+  const xmlSafeJs = code
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026');
   
-  // Sanitize any CDATA end tags inside code
-  const safeCode = code.replace(/\]\]>/g, ']]]]><![CDATA[>');
-  
-  return `<script${cleanAttrs}>\n//<![CDATA[\n${safeCode}\n//]]>\n</script>`;
+  return `<script${cleanAttrs}>\n//<![CDATA[\n${xmlSafeJs}\n//]]>\n</script>`;
 });
 
-// 4. Wrap style contents in Blogger official CDATA
+// 4. Wrap style contents in CDATA
 html = html.replace(/<style([^>]*)>([\s\S]*?)<\/style>/gi, (match, attrs, css) => {
   if (!css.trim()) return match;
   const safeCss = css.replace(/\]\]>/g, ']]]]><![CDATA[>');
   return `<style${attrs}>\n/*<![CDATA[*/\n${safeCss}\n/*]]>*/\n</style>`;
 });
 
-// Extract head and body
 let headContent = html.substring(html.indexOf('<head>') + 6, html.indexOf('</head>'));
 let bodyContent = html.substring(html.indexOf('<body'), html.indexOf('</body>') + 7);
 
@@ -78,4 +79,4 @@ ${bodyContent}
 
 fs.writeFileSync(outputXmlPath, bloggerXml, 'utf-8');
 fs.writeFileSync(outputHtmlPath, bloggerXml, 'utf-8');
-console.log('Successfully updated blogger_theme.xml and blogger_standalone.html with Blogger //<![CDATA[');
+console.log('Successfully updated blogger_theme.xml with SAX Unicode escaping (\\u003c & \\u003e)');
