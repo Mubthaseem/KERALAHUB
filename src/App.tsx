@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useEmergencyStore } from './services/store';
-import { Navbar } from './components/Navbar';
+import { SidebarNav } from './components/SidebarNav';
+import { RightSidebar } from './components/RightSidebar';
+import { BottomNav } from './components/BottomNav';
+
 import { InteractiveDisasterMap } from './components/InteractiveDisasterMap';
 import { SOSModal } from './components/SOSModal';
 import { ReportModal } from './components/ReportModal';
@@ -15,7 +18,6 @@ import { EventsTourism } from './components/EventsTourism';
 import { AdminDashboard } from './components/AdminDashboard';
 import { AIAssistant } from './components/AIAssistant';
 import { UserProfileModal } from './components/UserProfileModal';
-import { BottomNav } from './components/BottomNav';
 
 export const App: React.FC = () => {
   const {
@@ -65,111 +67,132 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans flex flex-col pb-16 md:pb-0 selection:bg-emerald-600 selection:text-white">
+    <div className="bg-background text-on-surface font-sans min-h-screen selection:bg-primary-container selection:text-on-primary-container">
       
-      {/* Navigation Header */}
-      <Navbar
-        selectedDistrict={selectedDistrict}
-        onSelectDistrict={setSelectedDistrict}
-        activeTab={activeTab}
-        onSelectTab={setActiveTab}
-        onOpenSOSModal={() => requireAuth(() => { setMapSOSCoords(null); setIsSOSModalOpen(true); })}
-        onOpenReportModal={() => requireAuth(() => setIsReportModalOpen(true))}
-        onOpenBloggerModal={() => setIsBloggerModalOpen(true)}
-        sosCount={sosRequests.filter(s => s.status === 'PENDING').length}
-        language={language}
-        onToggleLanguage={setLanguage}
-        currentUser={currentUser}
-        onOpenAuthModal={() => setIsAuthModalOpen(true)}
-        onSignOut={() => setCurrentUser(null)}
-      />
+      {/* 3-Column Stitch Layout */}
+      <div className="flex min-h-screen max-w-[1440px] mx-auto relative">
+        
+        {/* Left SideNav */}
+        <SidebarNav
+          activeTab={activeTab}
+          onSelectTab={setActiveTab}
+          onOpenReportModal={() => requireAuth(() => setIsReportModalOpen(true))}
+          currentUser={currentUser}
+          onOpenAuthModal={() => setIsAuthModalOpen(true)}
+        />
 
-      {/* Main Content Body */}
-      <main className="flex-1 p-3 sm:p-4 max-w-7xl mx-auto w-full font-sans">
-        {activeTab === 'map' && (
-          <InteractiveDisasterMap
-            sosRequests={sosRequests}
-            disasterReports={disasterReports}
-            reliefCamps={reliefCamps}
-            selectedDistrict={selectedDistrict}
-            onSelectDistrict={setSelectedDistrict}
-            onOpenSOSModalWithCoords={handleOpenSOSWithCoords}
-            onUpvoteReport={upvoteReport}
-            language={language}
-          />
-        )}
+        {/* Center Content Area */}
+        <main className="flex-1 md:ml-64 flex justify-center w-full min-h-screen pb-20 md:pb-6">
+          <div className="w-full max-w-[720px] border-r border-outline-variant/20 min-h-screen p-2 sm:p-4">
+            
+            {/* Top Live Emergency Banner */}
+            <div className="bg-error-container/20 border border-error/40 rounded-xl p-3 mb-4 flex items-center justify-between text-xs text-on-surface">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-error animate-ping"></span>
+                <span className="font-bold text-error uppercase">Live Alert:</span>
+                <span className="truncate max-w-[200px] sm:max-w-md text-on-surface-variant">
+                  Waynad Chooralmala & Kuttanad Alappuzha emergency response active
+                </span>
+              </div>
+              <button
+                onClick={() => requireAuth(() => { setMapSOSCoords(null); setIsSOSModalOpen(true); })}
+                className="bg-error hover:bg-error/90 text-on-error font-bold px-3 py-1 rounded-lg shrink-0 text-[11px] shadow"
+              >
+                SOS HELP
+              </button>
+            </div>
 
-        {activeTab === 'feed' && (
-          <PhotoFeed
-            reports={disasterReports}
-            selectedDistrict={selectedDistrict}
-            onSelectDistrict={setSelectedDistrict}
-            onAddReport={(data) => requireAuth(() => addDisasterReport(data))}
-            onUpvoteReport={upvoteReport}
-            language={language}
-            currentUser={currentUser}
-            onOpenAuthModal={() => setIsAuthModalOpen(true)}
-          />
-        )}
+            {activeTab === 'map' && (
+              <InteractiveDisasterMap
+                sosRequests={sosRequests}
+                disasterReports={disasterReports}
+                reliefCamps={reliefCamps}
+                selectedDistrict={selectedDistrict}
+                onSelectDistrict={setSelectedDistrict}
+                onOpenSOSModalWithCoords={handleOpenSOSWithCoords}
+                onUpvoteReport={upvoteReport}
+                language={language}
+              />
+            )}
 
-        {activeTab === 'jobs' && (
-          <MarketplaceJobs
-            selectedDistrict={selectedDistrict}
-            onSelectDistrict={setSelectedDistrict}
-            language={language}
-            currentUser={currentUser}
-            onOpenAuthModal={() => setIsAuthModalOpen(true)}
-          />
-        )}
+            {activeTab === 'feed' && (
+              <PhotoFeed
+                reports={disasterReports}
+                selectedDistrict={selectedDistrict}
+                onSelectDistrict={setSelectedDistrict}
+                onAddReport={(data) => requireAuth(() => addDisasterReport(data))}
+                onUpvoteReport={upvoteReport}
+                language={language}
+                currentUser={currentUser}
+                onOpenAuthModal={() => setIsAuthModalOpen(true)}
+              />
+            )}
 
-        {activeTab === 'events' && (
-          <EventsTourism
-            selectedDistrict={selectedDistrict}
-            onSelectDistrict={setSelectedDistrict}
-            language={language}
-          />
-        )}
+            {activeTab === 'jobs' && (
+              <MarketplaceJobs
+                selectedDistrict={selectedDistrict}
+                onSelectDistrict={setSelectedDistrict}
+                language={language}
+                currentUser={currentUser}
+                onOpenAuthModal={() => setIsAuthModalOpen(true)}
+              />
+            )}
 
-        {activeTab === 'camps' && (
-          <ReliefCamps
-            camps={reliefCamps}
-            selectedDistrict={selectedDistrict}
-            onSelectDistrict={setSelectedDistrict}
-            onJumpToCampMap={handleJumpToCampMap}
-          />
-        )}
+            {activeTab === 'events' && (
+              <EventsTourism
+                selectedDistrict={selectedDistrict}
+                onSelectDistrict={setSelectedDistrict}
+                language={language}
+              />
+            )}
 
-        {activeTab === 'forums' && (
-          <Forums
-            posts={forumPosts}
-            selectedDistrict={selectedDistrict}
-            onSelectDistrict={setSelectedDistrict}
-            onAddPost={(data) => requireAuth(() => addForumPost(data))}
-            onAddComment={(id, author, text) => requireAuth(() => addForumComment(id, author, text))}
-            onUpvotePost={upvoteForumPost}
-            currentUser={currentUser}
-            onOpenAuthModal={() => setIsAuthModalOpen(true)}
-          />
-        )}
+            {activeTab === 'camps' && (
+              <ReliefCamps
+                camps={reliefCamps}
+                selectedDistrict={selectedDistrict}
+                onSelectDistrict={setSelectedDistrict}
+                onJumpToCampMap={handleJumpToCampMap}
+              />
+            )}
 
-        {activeTab === 'contacts' && (
-          <EmergencyContacts />
-        )}
+            {activeTab === 'forums' && (
+              <Forums
+                posts={forumPosts}
+                selectedDistrict={selectedDistrict}
+                onSelectDistrict={setSelectedDistrict}
+                onAddPost={(data) => requireAuth(() => addForumPost(data))}
+                onAddComment={(id, author, text) => requireAuth(() => addForumComment(id, author, text))}
+                onUpvotePost={upvoteForumPost}
+                currentUser={currentUser}
+                onOpenAuthModal={() => setIsAuthModalOpen(true)}
+              />
+            )}
 
-        {activeTab === 'ai' && (
-          <AIAssistant selectedDistrict={selectedDistrict} />
-        )}
+            {activeTab === 'contacts' && (
+              <EmergencyContacts />
+            )}
 
-        {activeTab === 'profile' && (
-          <UserProfileModal currentUser={currentUser} reports={disasterReports} />
-        )}
+            {activeTab === 'ai' && (
+              <AIAssistant selectedDistrict={selectedDistrict} />
+            )}
 
-        {activeTab === 'admin' && (
-          <AdminDashboard currentUser={currentUser} />
-        )}
-      </main>
+            {activeTab === 'profile' && (
+              <UserProfileModal currentUser={currentUser} reports={disasterReports} />
+            )}
 
-      {/* Mobile Sticky Bottom Navigation Bar (Matching Mockup Image) */}
+            {activeTab === 'admin' && (
+              <AdminDashboard currentUser={currentUser} />
+            )}
+
+          </div>
+        </main>
+
+        {/* Right Sidebar Widgets */}
+        <RightSidebar selectedDistrict={selectedDistrict} onSelectDistrict={setSelectedDistrict} />
+
+      </div>
+
+      {/* Mobile Sticky Bottom Navigation Bar */}
       <BottomNav
         activeTab={activeTab}
         onSelectTab={setActiveTab}
@@ -205,18 +228,6 @@ export const App: React.FC = () => {
         isOpen={isBloggerModalOpen}
         onClose={() => setIsBloggerModalOpen(false)}
       />
-
-      {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-500 font-sans">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p>
-            © 2026 <strong>KERALAHUB.ONLINE</strong> • The Digital Home of Kerala
-          </p>
-          <p className="text-[11px] text-slate-400">
-            Powered by OpenStreetMap, Supabase Auth & Google Blogger Architecture
-          </p>
-        </div>
-      </footer>
 
     </div>
   );
