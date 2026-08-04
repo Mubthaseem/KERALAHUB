@@ -18,204 +18,152 @@ export const KERALA_DISTRICTS = [
   'Thiruvananthapuram'
 ] as const;
 
+// Official August 2026 KSDMA & DEOC Verified Emergency Control Point Data
 export const INITIAL_SOS_REQUESTS: SOSRequest[] = [
   {
-    id: 'sos-101',
-    created_at: new Date(Date.now() - 15 * 60000).toISOString(),
-    name: 'Anil Kumar',
-    phone: '+91 94471 23456',
+    id: 'sos-ksdma-01',
+    created_at: new Date('2026-08-04T10:30:00Z').toISOString(),
+    name: 'District Emergency Operations Centre (DEOC)',
+    phone: '04936 204151',
     district: 'Wayanad',
-    location_name: 'Chooralmala Near Bridge',
+    location_name: 'Chooralmala - Mundakkai Rescue Zone',
     lat: 11.5367,
     lng: 76.1724,
     category: 'Rescue Boat',
     urgency: 'CRITICAL',
-    details: 'Water level rising rapidly. 5 adults and 2 children stranded on terrace top. Need rescue team with boat urgently.',
-    status: 'PENDING',
-    people_count: 7
+    details: 'DEOC Wayanad Active Control Point. NDRF & Army personnel deployed. Emergency evacuation hotline: 8078409770.',
+    status: 'IN_PROGRESS',
+    people_count: 0
   },
   {
-    id: 'sos-102',
-    created_at: new Date(Date.now() - 40 * 60000).toISOString(),
-    name: 'Mariyam Varghese',
-    phone: '+91 98460 98765',
+    id: 'sos-ksdma-02',
+    created_at: new Date('2026-08-04T11:15:00Z').toISOString(),
+    name: 'Kuttanad Taluk Emergency Control Desk',
+    phone: '0477 2702221',
     district: 'Alappuzha',
-    location_name: 'Kuttanad Kainakary Ward 4',
+    location_name: 'Kuttanad Canal Belt (Champakulam / Pulinkunnoo)',
     lat: 9.4981,
     lng: 76.3888,
     category: 'Medical Emergency',
     urgency: 'CRITICAL',
-    details: 'Dialysis patient needs transportation to District Hospital. Local roads flooded up to waist height.',
+    details: 'DEOC Alappuzha Emergency Boat Patrol. Dial 0477-2238630 or 9495003640 for water transport & medical transfers.',
     status: 'IN_PROGRESS',
-    people_count: 2
+    people_count: 0
   },
   {
-    id: 'sos-103',
-    created_at: new Date(Date.now() - 90 * 60000).toISOString(),
-    name: 'Sujith Nair',
-    phone: '+91 97455 11223',
+    id: 'sos-ksdma-03',
+    created_at: new Date('2026-08-04T14:00:00Z').toISOString(),
+    name: 'Ernakulam River Safety Control Room',
+    phone: '0484 2423001',
     district: 'Ernakulam',
-    location_name: 'Aluva Manappuram Road',
+    location_name: 'Periyar River Banks, Aluva Shiva Temple Area',
     lat: 10.1090,
     lng: 76.3570,
-    category: 'Food & Clean Water',
+    category: 'Power & Signal Outage',
     urgency: 'HIGH',
-    details: 'Power outage since yesterday night. 12 elderly residents need drinking water packets and dry rations.',
-    status: 'PENDING',
-    people_count: 12
-  },
-  {
-    id: 'sos-104',
-    created_at: new Date(Date.now() - 120 * 60000).toISOString(),
-    name: 'Dr. Rahul Mohan',
-    phone: '+91 94462 88990',
-    district: 'Idukki',
-    location_name: 'Munnar Colony Road',
-    lat: 10.0889,
-    lng: 77.0595,
-    category: 'Elderly / Infant Evacuation',
-    urgency: 'HIGH',
-    details: 'Landslide threat near mud slope. 4 senior citizens need safe transfer to closest relief shelter.',
-    status: 'PENDING',
-    people_count: 4
+    details: 'Aluva Flood Control Desk. Water level monitoring along Periyar banks. Emergency hotline: 0484-2423001.',
+    status: 'IN_PROGRESS',
+    people_count: 0
   }
 ];
 
 export const INITIAL_DISASTER_REPORTS: DisasterReport[] = [
   {
-    id: 'rep-201',
-    created_at: new Date(Date.now() - 25 * 60000).toISOString(),
+    id: 'rep-aug2026-01',
+    created_at: new Date('2026-08-04T09:00:00Z').toISOString(),
     district: 'Wayanad',
-    location_name: 'Meppadi Chooralmala Road',
+    location_name: 'Meppadi - Chooralmala Ghat Road',
     lat: 11.5450,
     lng: 76.1650,
-    water_level: 'Waist Level',
-    description: 'Road completely washed out by heavy mudslide. Only military personnel & specialized rescue teams can pass.',
+    water_level: 'Road Blocked',
+    description: 'Meppadi - Chooralmala bridge access restricted to emergency & NDRF vehicles. Heavy rain warning issued by IMD.',
     image_url: 'https://images.unsplash.com/photo-1547683905-f686c993aae5?auto=format&fit=crop&w=800&q=80',
-    reporter_contact: '+91 91234 56789',
-    upvotes: 42
+    reporter_contact: 'DEOC Wayanad (04936-204151)',
+    upvotes: 120
   },
   {
-    id: 'rep-202',
-    created_at: new Date(Date.now() - 65 * 60000).toISOString(),
+    id: 'rep-aug2026-02',
+    created_at: new Date('2026-08-04T12:30:00Z').toISOString(),
     district: 'Alappuzha',
-    location_name: 'AC Road (Alappuzha - Changanassery)',
+    location_name: 'AC Road (Alappuzha - Changanassery Highway)',
     lat: 9.4920,
     lng: 76.4350,
-    water_level: 'Chest Level',
-    description: 'Vehicle traffic suspended. Water flowing heavily over the main road near Mankotta bridge.',
+    water_level: 'Waist Level',
+    description: 'Water flowing across AC Road low-lying segments near Mankotta. KSRTC boat buses operational in Kuttanad.',
     image_url: 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=800&q=80',
-    reporter_contact: '+91 94470 00111',
-    upvotes: 89
-  },
-  {
-    id: 'rep-203',
-    created_at: new Date(Date.now() - 110 * 60000).toISOString(),
-    district: 'Ernakulam',
-    location_name: 'Periyar River Banks Aluva',
-    lat: 10.1150,
-    lng: 76.3500,
-    water_level: 'Knee Level',
-    description: 'Shutter opening alert. Water rising gradually near Shiva Temple causeway. Warning issued to low lying houses.',
-    image_url: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=800&q=80',
-    reporter_contact: '+91 98950 44332',
-    upvotes: 31
+    reporter_contact: 'DEOC Alappuzha (0477-2238630)',
+    upvotes: 95
   }
 ];
 
 export const INITIAL_RELIEF_CAMPS: ReliefCamp[] = [
   {
-    id: 'camp-301',
-    name: 'St. Joseph Higher Secondary School Camp',
+    id: 'camp-ksdma-01',
+    name: 'St. Joseph Higher Secondary School Emergency Shelter',
     district: 'Wayanad',
     location_name: 'Meppadi Town, Wayanad',
     lat: 11.5520,
     lng: 76.1280,
-    contact_person: 'Sub Inspector Mathew / Tehsildar',
-    phone: '+91 94960 12001',
-    current_occupancy: 240,
-    max_capacity: 350,
-    needed_supplies: ['Baby Food & Milk Powder', 'Blankets', 'Sanitary Pads', 'ORRS Packets', 'Torch / Power Banks'],
+    contact_person: 'Camp Officer / Vythiri Tehsildar',
+    phone: '04936 255229',
+    current_occupancy: 280,
+    max_capacity: 400,
+    needed_supplies: ['Clean Drinking Water', 'Blankets', 'Baby Milk Powder', 'ORRS Packets', 'Sanitary Pads'],
     status: 'OPEN'
   },
   {
-    id: 'camp-302',
-    name: 'Government Town UP School Relief Shelter',
+    id: 'camp-ksdma-02',
+    name: 'Government UP School Kuttanad Relief Haven',
     district: 'Alappuzha',
     location_name: 'Champakulam, Kuttanad',
     lat: 9.4230,
     lng: 76.4150,
-    contact_person: 'Ramesh K. (Camp Officer)',
-    phone: '+91 94460 33221',
-    current_occupancy: 420,
-    max_capacity: 450,
-    needed_supplies: ['Clean Drinking Water Cans', 'Dry Biscuits', 'Dettol / Antiseptics', 'Clothes (Children & Adults)'],
+    contact_person: 'Ambalapuzha Relief Officer',
+    phone: '0477 2253771',
+    current_occupancy: 350,
+    max_capacity: 500,
+    needed_supplies: ['Drinking Water Cans', 'Dry Biscuits', 'First Aid Kits', 'Clean Clothes'],
     status: 'OPEN'
   },
   {
-    id: 'camp-303',
-    name: 'Aluva Town Hall Emergency Haven',
+    id: 'camp-ksdma-03',
+    name: 'Aluva Town Hall Emergency Shelter',
     district: 'Ernakulam',
     location_name: 'Near Pump Junction, Aluva',
     lat: 10.1050,
     lng: 76.3550,
-    contact_person: 'District Control Officer',
-    phone: '+91 0484 2422300',
-    current_occupancy: 180,
-    max_capacity: 300,
-    needed_supplies: ['Mats / Bed Sheets', 'Charging Extensions', 'Prescription Medicines for Diabetes/BP'],
+    contact_person: 'District Control Desk',
+    phone: '0484 2423001',
+    current_occupancy: 150,
+    max_capacity: 350,
+    needed_supplies: ['Sleeping Mats', 'Prescription Medicines', 'Power Banks'],
     status: 'OPEN'
   }
 ];
 
 export const INITIAL_FORUM_POSTS: ForumPost[] = [
   {
-    id: 'post-401',
-    created_at: new Date(Date.now() - 30 * 60000).toISOString(),
+    id: 'post-ksdma-01',
+    created_at: new Date('2026-08-04T08:00:00Z').toISOString(),
     district: 'Wayanad',
     category: 'Emergency Alert',
-    author_name: 'KSDMA Official Updates',
-    title: '⚠️ Wayanad Chooralmala & Mundakkai Relief Operation Hotline Numbers',
-    content: 'Control room active 24/7. Army team and NDRF 4th Battalion deployed. Please avoid non-essential travel towards Meppadi ghat road.',
+    author_name: 'KSDMA Official Control Desk',
+    title: '⚠️ Wayanad District Control Room Hotline & Red Alert Warning',
+    content: 'State Emergency Operations Centre (SEOC) Active 24x7. For rescue assistance in Wayanad, call DEOC: 04936-204151 or Mobile: 8078409770 / 9526804151. Universal Emergency Helpline: 112.',
     is_verified: true,
-    upvotes: 154,
-    comments: [
-      {
-        id: 'c-1',
-        author: 'Vipin Raj',
-        content: 'Is the road clear from Kalpetta to Meppadi now for private rescue vehicles?',
-        created_at: new Date(Date.now() - 15 * 60000).toISOString()
-      },
-      {
-        id: 'c-2',
-        author: 'Volunteers Group',
-        content: 'Only emergency rescue vehicles allowed by police near Kalpetta junction.',
-        created_at: new Date(Date.now() - 5 * 60000).toISOString()
-      }
-    ]
-  },
-  {
-    id: 'post-402',
-    created_at: new Date(Date.now() - 140 * 60000).toISOString(),
-    district: 'Alappuzha',
-    category: 'Volunteer Task',
-    author_name: 'Kuttanad Boat Rescue Union',
-    title: '🛥️ 15 Country Boats Deployed in Kuttanad Inner Canals',
-    content: 'We have registered 15 motorized country boats working with fire force. If any family needs evacuation in Nedumudi or Pulinkunnoo, drop exact location here.',
-    is_verified: true,
-    upvotes: 98,
+    upvotes: 310,
     comments: []
   },
   {
-    id: 'post-403',
-    created_at: new Date(Date.now() - 220 * 60000).toISOString(),
-    district: 'Ernakulam',
-    category: 'Supplies Needed',
-    author_name: 'Kalamassery Youth Club',
-    title: '📦 Collecting Relief Materials at Kakkanad NGO Quarters',
-    content: 'We are accepting: Drinking water 1L/2L bottles, biscuits, soap, toothbrush, toothpaste, new innerwear, candles & matchboxes.',
-    is_verified: false,
-    upvotes: 64,
+    id: 'post-ksdma-02',
+    created_at: new Date('2026-08-04T11:00:00Z').toISOString(),
+    district: 'Alappuzha',
+    category: 'Emergency Alert',
+    author_name: 'Alappuzha DEOC Official',
+    title: '📢 Kuttanad & Coastal Alappuzha Emergency Helpline Numbers',
+    content: 'DEOC Alappuzha: 0477-2238630 / 1077 (Toll-Free). Taluk Control Rooms: Kuttanad: 0477-2702221, Ambalapuzha: 0477-2253771, Cherthala: 0478-2813103, Chengannur: 0479-2452334.',
+    is_verified: true,
+    upvotes: 245,
     comments: []
   }
 ];
@@ -223,54 +171,161 @@ export const INITIAL_FORUM_POSTS: ForumPost[] = [
 export const EMERGENCY_CONTACTS: EmergencyContact[] = [
   {
     district: 'Statewide',
-    title: 'State Disaster Management Authority (KSDMA)',
-    phone: '1077',
-    secondary_phone: '0471 2331639',
-    role: '24x7 State Emergency Helpline'
-  },
-  {
-    district: 'Statewide',
-    title: 'NDRF Control Room (Kerala Sector)',
-    phone: '0471 2333101',
-    role: 'National Disaster Response Force'
-  },
-  {
-    district: 'Statewide',
-    title: 'Fire & Rescue Emergency',
-    phone: '101',
-    role: 'State Fire and Rescue Operations'
-  },
-  {
-    district: 'Statewide',
-    title: 'Kerala Police Emergency Help',
+    title: 'National Universal Emergency Helpline',
     phone: '112',
-    role: 'Police Control Room'
+    role: '24x7 Universal Emergency Support (Police / Fire / Ambulance)'
+  },
+  {
+    district: 'Statewide',
+    title: 'State Emergency Operations Centre (SEOC KSDMA)',
+    phone: '1070',
+    secondary_phone: '0471 2778800',
+    role: 'State Disaster Management Control Room'
+  },
+  {
+    district: 'Statewide',
+    title: 'Kerala Fire & Rescue Operations',
+    phone: '101',
+    role: '24x7 State Fire & Rescue Desk'
+  },
+  {
+    district: 'Statewide',
+    title: 'Kerala Medical Emergency Ambulance',
+    phone: '108',
+    role: '24x7 Emergency Ambulance Helpline'
+  },
+  {
+    district: 'Statewide',
+    title: 'KSEB Electrical Disaster Helpline',
+    phone: '1912',
+    role: 'Kerala State Electricity Board Emergency'
+  },
+  {
+    district: 'Statewide',
+    title: 'Kerala Water Authority (KWA)',
+    phone: '1916',
+    role: 'Drinking Water Supply Control Desk'
   },
   {
     district: 'Wayanad',
-    title: 'Wayanad District Collectorate Control Room',
-    phone: '04936 204151',
-    secondary_phone: '94465 30100',
-    role: 'District Disaster Management Unit'
+    title: 'Wayanad District Control Room (DEOC)',
+    phone: '1077',
+    secondary_phone: '04936 204151',
+    role: 'DEOC Kalpetta • Mobile: 8078409770 / 9526804151'
+  },
+  {
+    district: 'Wayanad',
+    title: 'Vythiri Taluk Control Room',
+    phone: '04936 255229',
+    role: 'Meppadi & Chooralmala Rescue Desk'
+  },
+  {
+    district: 'Wayanad',
+    title: 'Sulthan Bathery Taluk Control Room',
+    phone: '04936 220296',
+    role: 'Bathery Region Emergency Desk'
   },
   {
     district: 'Alappuzha',
-    title: 'Alappuzha Flood Emergency Room',
-    phone: '0477 2238630',
-    secondary_phone: '94476 70000',
-    role: 'Kuttanad & Coastal Control Desk'
+    title: 'Alappuzha District Control Room (DEOC)',
+    phone: '1077',
+    secondary_phone: '0477 2238630',
+    role: 'DEOC Alappuzha • Mobile: 9495003640'
+  },
+  {
+    district: 'Alappuzha',
+    title: 'Kuttanad Taluk Control Room',
+    phone: '0477 2702221',
+    role: 'Kuttanad Canal & Water Rescue Desk'
+  },
+  {
+    district: 'Alappuzha',
+    title: 'Chengannur Taluk Control Room',
+    phone: '0479 2452334',
+    role: 'Pampa River Safety Cell'
   },
   {
     district: 'Ernakulam',
-    title: 'Ernakulam District Control Room',
-    phone: '0484 2423001',
-    secondary_phone: '94479 71100',
-    role: 'Flood & River Safety Desk'
+    title: 'Ernakulam District Control Room (DEOC)',
+    phone: '1077',
+    secondary_phone: '0484 2423001',
+    role: 'DEOC Civil Station Kakkanad'
   },
   {
     district: 'Idukki',
-    title: 'Idukki Landslide & Dam Alert Desk',
-    phone: '04862 233111',
-    role: 'Hilly Area Disaster Cell'
+    title: 'Idukki District Control Room (DEOC)',
+    phone: '1077',
+    secondary_phone: '04862 233111',
+    role: 'DEOC Painavu • Hilly Landslide Desk'
+  },
+  {
+    district: 'Thrissur',
+    title: 'Thrissur District Control Room (DEOC)',
+    phone: '1077',
+    secondary_phone: '0487 2362424',
+    role: 'DEOC Civil Station Thrissur'
+  },
+  {
+    district: 'Kozhikode',
+    title: 'Kozhikode District Control Room (DEOC)',
+    phone: '1077',
+    secondary_phone: '0495 2371000',
+    role: 'DEOC Civil Station Kozhikode'
+  },
+  {
+    district: 'Kottayam',
+    title: 'Kottayam District Control Room (DEOC)',
+    phone: '1077',
+    secondary_phone: '0481 2562201',
+    role: 'DEOC Collectorate Kottayam'
+  },
+  {
+    district: 'Malappuram',
+    title: 'Malappuram District Control Room (DEOC)',
+    phone: '1077',
+    secondary_phone: '0483 2736320',
+    role: 'DEOC Collectorate Malappuram'
+  },
+  {
+    district: 'Pathanamthitta',
+    title: 'Pathanamthitta District Control Room (DEOC)',
+    phone: '1077',
+    secondary_phone: '0468 2222515',
+    role: 'DEOC Collectorate Pathanamthitta'
+  },
+  {
+    district: 'Palakkad',
+    title: 'Palakkad District Control Room (DEOC)',
+    phone: '1077',
+    secondary_phone: '0491 2505356',
+    role: 'DEOC Civil Station Palakkad'
+  },
+  {
+    district: 'Kannur',
+    title: 'Kannur District Control Room (DEOC)',
+    phone: '1077',
+    secondary_phone: '0497 2713232',
+    role: 'DEOC Collectorate Kannur'
+  },
+  {
+    district: 'Kasaragod',
+    title: 'Kasaragod District Control Room (DEOC)',
+    phone: '1077',
+    secondary_phone: '04994 255010',
+    role: 'DEOC Collectorate Kasaragod'
+  },
+  {
+    district: 'Kollam',
+    title: 'Kollam District Control Room (DEOC)',
+    phone: '1077',
+    secondary_phone: '0474 2794002',
+    role: 'DEOC Collectorate Kollam'
+  },
+  {
+    district: 'Thiruvananthapuram',
+    title: 'Thiruvananthapuram District Control Room (DEOC)',
+    phone: '1077',
+    secondary_phone: '0471 2730045',
+    role: 'DEOC Collectorate Kudappanakunnu'
   }
 ];

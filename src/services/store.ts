@@ -4,10 +4,10 @@ import { INITIAL_SOS_REQUESTS, INITIAL_DISASTER_REPORTS, INITIAL_RELIEF_CAMPS, I
 import { supabase, isSupabaseConfigured } from './supabase';
 
 const STORAGE_KEYS = {
-  SOS: 'keralahub_sos_v1',
-  REPORTS: 'keralahub_reports_v1',
-  CAMPS: 'keralahub_camps_v1',
-  FORUMS: 'keralahub_forums_v1'
+  SOS: 'keralahub_sos_v2_aug2026',
+  REPORTS: 'keralahub_reports_v2_aug2026',
+  CAMPS: 'keralahub_camps_v2_aug2026',
+  FORUMS: 'keralahub_forums_v2_aug2026'
 };
 
 export function useEmergencyStore() {
