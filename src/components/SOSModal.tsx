@@ -100,11 +100,11 @@ export const SOSModal: React.FC<SOSModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[1000] bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-200 my-8">
+    <div className="fixed inset-0 z-[1000] bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-200 my-auto max-h-[92vh] flex flex-col">
         
         {/* Spider Distress Signal Modal Header */}
-        <div className="bg-red-600 text-white p-5 flex items-center justify-between">
+        <div className="bg-red-600 text-white p-4 sm:p-5 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/20">
               <ShieldAlert className="w-6 h-6 text-white animate-pulse" />
@@ -127,7 +127,7 @@ export const SOSModal: React.FC<SOSModalProps> = ({
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4 font-sans text-xs">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-3 sm:space-y-4 font-sans text-xs overflow-y-auto flex-1">
           
           {/* Priority Urgency Picker */}
           <div>
