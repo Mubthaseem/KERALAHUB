@@ -12,30 +12,32 @@ if (!fs.existsSync(distHtmlPath)) {
 
 let html = fs.readFileSync(distHtmlPath, 'utf-8');
 
-// 1. Convert HTML boolean attributes to strict XML attribute="value" syntax
-html = html.replace(/\bcrossorigin\b(?!\s*=)/gi, 'crossorigin="anonymous"');
-html = html.replace(/\basync\b(?!\s*=)/gi, 'async="async"');
-html = html.replace(/\bdefer\b(?!\s*=)/gi, 'defer="defer"');
+// Clean up any double-nested attribute artifacts
+html = html.replaceAll('crossorigin="crossorigin="anonymous""', 'crossorigin="anonymous"');
+html = html.replaceAll('crossorigin="crossorigin"', 'crossorigin="anonymous"');
+html = html.replaceAll('crossorigin=""', 'crossorigin="anonymous"');
+html = html.replaceAll('crossorigin ', 'crossorigin="anonymous" ');
+html = html.replaceAll('crossorigin>', 'crossorigin="anonymous">');
 
-// 2. Fix self-closing tags
+// Fix self-closing tags for link and meta
 html = html.replace(/<link([^>]*)(?<!\/)>/gi, '<link$1 />');
 html = html.replace(/<meta([^>]*)(?<!\/)>/gi, '<meta$1 />');
 
-// 3. Extract script contents and escape all '<' and '>' to unicode (\u003c & \u003e) for SAX parser safety
+// Process script tags with JS Unicode escaping (\u003c, \u003e, \u0026)
 html = html.replace(/<script([^>]*)>([\s\S]*?)<\/script>/gi, (match, attrs, code) => {
   if (!code.trim()) return match;
   
   let cleanAttrs = attrs
-    .replace(/\bcrossorigin\b(?!\s*=)/gi, 'crossorigin="anonymous"')
-    .replace(/\basync\b(?!\s*=)/gi, 'async="async"')
-    .replace(/\bdefer\b(?!\s*=)/gi, 'defer="defer"');
+    .replaceAll('crossorigin="crossorigin="anonymous""', 'crossorigin="anonymous"')
+    .replaceAll('crossorigin="crossorigin"', 'crossorigin="anonymous"')
+    .replaceAll('crossorigin=""', 'crossorigin="anonymous"')
+    .replaceAll('crossorigin ', 'crossorigin="anonymous" ')
+    .replaceAll('crossorigin>', 'crossorigin="anonymous">');
   
   if (!cleanAttrs.includes('type=')) {
     cleanAttrs += ' type="text/javascript"';
   }
 
-  // Escape XML-sensitive characters in JS code using JS Unicode escapes
-  // \u003c for '<', \u003e for '>', \u0026 for '&'
   const xmlSafeJs = code
     .replace(/</g, '\\u003c')
     .replace(/>/g, '\\u003e')
@@ -44,7 +46,7 @@ html = html.replace(/<script([^>]*)>([\s\S]*?)<\/script>/gi, (match, attrs, code
   return `<script${cleanAttrs}>\n//<![CDATA[\n${xmlSafeJs}\n//]]>\n</script>`;
 });
 
-// 4. Wrap style contents in CDATA
+// Process style tags
 html = html.replace(/<style([^>]*)>([\s\S]*?)<\/style>/gi, (match, attrs, css) => {
   if (!css.trim()) return match;
   const safeCss = css.replace(/\]\]>/g, ']]]]><![CDATA[>');
@@ -53,6 +55,13 @@ html = html.replace(/<style([^>]*)>([\s\S]*?)<\/style>/gi, (match, attrs, css) =
 
 let headContent = html.substring(html.indexOf('<head>') + 6, html.indexOf('</head>'));
 let bodyContent = html.substring(html.indexOf('<body'), html.indexOf('</body>') + 7);
+
+// Clean up duplicate head metas/titles & broken crossorigin
+headContent = headContent.replaceAll('crossorigin="crossorigin="anonymous""', 'crossorigin="anonymous"');
+headContent = headContent.replaceAll('crossorigin="crossorigin"', 'crossorigin="anonymous"');
+headContent = headContent.replaceAll('crossorigin=""', 'crossorigin="anonymous"');
+headContent = headContent.replaceAll('crossorigin ', 'crossorigin="anonymous" ');
+headContent = headContent.replaceAll('crossorigin>', 'crossorigin="anonymous">');
 
 // 5. Construct 100% valid Blogger SAX XML template
 const bloggerXml = `<?xml version="1.0" encoding="UTF-8" ?>
@@ -79,4 +88,4 @@ ${bodyContent}
 
 fs.writeFileSync(outputXmlPath, bloggerXml, 'utf-8');
 fs.writeFileSync(outputHtmlPath, bloggerXml, 'utf-8');
-console.log('Successfully updated blogger_theme.xml with SAX Unicode escaping (\\u003c & \\u003e)');
+console.log('Successfully updated blogger_theme.xml with clean crossorigin attributes!');
