@@ -11,7 +11,7 @@ const BAD_WORDS_EN = [
   'nigger', 'nigga', 'retard', 'faggot', 'chink', 'spic', 'kike'
 ];
 
-// Malayalam Script Bad Words & Vulgarity Dictionary (മലയാളം)
+// Malayalam Script Bad Words Dictionary (മലയാളം)
 const BAD_WORDS_ML_SCRIPT = [
   'പൂറ്', 'മയിര്', 'തായോളി', 'പുലയാടി', 'പോടാ', 'തന്തയില്ലാത്ത', 'കുണ്ണ',
   'ചാപ്പ', 'വെടി', 'നായിന്റെ', 'നാറി', 'കൊണം', 'അണ്ടി', 'മൈര്',
@@ -25,6 +25,13 @@ const BAD_WORDS_MANGLISH = [
   'thaayoli', 'thayoli', 'pulayadi', 'thanthayillatha', 'kunna', 'kunda',
   'nayinte', 'nairi', 'naari', 'konam', 'andi', 'vedchi', 'vedi',
   'charakku', 'kazhappu', 'kazhappan', 'oombu', 'oomfi', 'oombi'
+];
+
+// Explicit NSFW / Nudity / Sensitive Keywords
+const NSFW_KEYWORDS = [
+  'nude', 'naked', 'sexy', 'nsfw', 'porn', 'adult', 'erotic', 'bikini',
+  'cleavage', 'lingerie', 'boobs', 'penis', 'vagina', 'sex', 'strip',
+  'gore', 'corpse', 'blood', 'bloodied', 'mutilated'
 ];
 
 export interface ModerationResult {
@@ -43,7 +50,7 @@ export function filterContent(text: string): ModerationResult {
   let isClean = true;
   const detectedWords: string[] = [];
 
-  // 1. Check English Profanity & Leetspeak
+  // 1. Check English Profanity
   for (const word of BAD_WORDS_EN) {
     const regex = new RegExp(`\\b${word}\\b`, 'gi');
     if (regex.test(cleanText)) {
@@ -62,7 +69,7 @@ export function filterContent(text: string): ModerationResult {
     }
   }
 
-  // 3. Check Manglish / Transliterated Bad Words
+  // 3. Check Manglish Bad Words
   for (const word of BAD_WORDS_MANGLISH) {
     const regex = new RegExp(`\\b${word}\\b`, 'gi');
     if (regex.test(cleanText)) {
@@ -73,13 +80,30 @@ export function filterContent(text: string): ModerationResult {
   }
 
   const flagReason = !isClean 
-    ? `Contains offensive language or inappropriate terms (${detectedWords.length} terms filtered)` 
+    ? `Contains offensive language (${detectedWords.length} terms filtered)` 
     : undefined;
 
   return { isClean, cleanText, flagReason, detectedWords };
 }
 
-// Anti-Spam & Duplicate Post Detector
+// Sensitive Photo Safety Detector (NSFW / Graphic Blur Trigger)
+export function inspectImageSensitivity(filenameOrUrl: string): { isSensitive: boolean; reason?: string } {
+  const trimmed = filenameOrUrl.trim();
+  
+  if (trimmed.length < 5) {
+    return { isSensitive: true, reason: 'Content is too short (minimum 5 characters).' };
+  }
+  
+  const isSensitive = NSFW_KEYWORDS.some((word) => trimmed.toLowerCase().includes(word));
+  
+  if (isSensitive) {
+    return { isSensitive: true, reason: 'Image flagged as sensitive.' };
+  }
+  
+  return { isSensitive: false };
+}
+
+// Anti-Spam Detector
 export function checkSpam(text: string, recentPosts: string[]): { isSpam: boolean; reason?: string } {
   const trimmed = text.trim();
   
@@ -87,37 +111,85 @@ export function checkSpam(text: string, recentPosts: string[]): { isSpam: boolea
     return { isSpam: true, reason: 'Content is too short (minimum 5 characters).' };
   }
 
-  // Check repeating characters (e.g., "aaaaaaaaaaaaaaaaa")
   if (/(.)\1{8,}/.test(trimmed)) {
     return { isSpam: true, reason: 'Spam detected: excessive repeated characters.' };
   }
 
-  // Check duplicate posts in store
   const isDuplicate = recentPosts.some(
     (postText) => postText.toLowerCase().trim() === trimmed.toLowerCase()
   );
 
   if (isDuplicate) {
-    return { isSpam: true, reason: 'Duplicate post detected. Please avoid duplicate spam.' };
+    return { isSpam: true, reason: 'Duplicate post detected.' };
   }
 
   return { isSpam: false };
 }
 
-// Sensitive Photo Safety Detector (NSFW / Graphic Blur Trigger)
-export function inspectImageSensitivity(filenameOrUrl: string): { isSensitive: boolean; reason?: string } {
-  const lower = filenameOrUrl.toLowerCase();
-  
-  const sensitiveKeywords = [
-    'blood', 'victim', 'corpse', 'nude', 'nsfw', 'graphic', 'injury', 
-    'casualty', 'gore', 'dead', 'body', 'trauma', 'accident'
-  ];
-  
-  const hasKeyword = sensitiveKeywords.some((key) => lower.includes(key));
+// STRICT UPLOAD BLOCKER for Nudity / Sexy / Sensitive / Explicit Photos
+export function validateImageFile(fileName: string, dataUrl?: string): Promise<{ isAllowed: boolean; reason?: string }> {
+  return new Promise((resolve) => {
+    const lowerName = fileName.toLowerCase();
 
-  if (hasKeyword) {
-    return { isSensitive: true, reason: 'Photo flagged for sensitive or graphic content' };
-  }
+    // 1. Check Filename for NSFW Keywords
+    const matchedKeyword = NSFW_KEYWORDS.find((word) => lowerName.includes(word));
+    if (matchedKeyword) {
+      return resolve({
+        isAllowed: false,
+        reason: `Upload Blocked: Image name contains restricted adult/sensitive term ("${matchedKeyword}").`
+      });
+    }
 
-  return { isSensitive: false };
+    if (!dataUrl) {
+      return resolve({ isAllowed: true });
+    }
+
+    // 2. Client-side Canvas RGB Skin Tone & Nudity Inspection
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return resolve({ isAllowed: true });
+
+        canvas.width = 100;
+        canvas.height = 100;
+        ctx.drawImage(img, 0, 0, 100, 100);
+
+        const imgData = ctx.getImageData(0, 0, 100, 100).data;
+        let skinPixels = 0;
+        const totalPixels = 100 * 100;
+
+        for (let i = 0; i < imgData.length; i += 4) {
+          const r = imgData[i];
+          const g = imgData[i + 1];
+          const b = imgData[i + 2];
+
+          // Standard RGB Skin-Tone Threshold Rule
+          if (r > 95 && g > 40 && b > 20 && r > g && r > b && Math.abs(r - g) > 15) {
+            skinPixels++;
+          }
+        }
+
+        const skinRatio = skinPixels / totalPixels;
+
+        // If image skin-tone ratio exceeds 45%, block upload for nudity/explicit content protection
+        if (skinRatio > 0.45) {
+          return resolve({
+            isAllowed: false,
+            reason: 'Upload Blocked: Image detected as inappropriate or explicit content (excessive skin exposure).'
+          });
+        }
+
+        resolve({ isAllowed: true });
+      } catch (err) {
+        // Fallback to allow if canvas inspection fails
+        resolve({ isAllowed: true });
+      }
+    };
+
+    img.onerror = () => resolve({ isAllowed: true });
+    img.src = dataUrl;
+  });
 }

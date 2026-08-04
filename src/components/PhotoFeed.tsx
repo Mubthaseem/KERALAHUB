@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DisasterReport, DistrictName } from '../types';
 import { Camera, Image as ImageIcon, Heart, Share2, ShieldAlert, Eye, EyeOff, PlusCircle, CheckCircle, AlertTriangle, MessageCircle, Send } from 'lucide-react';
-import { filterContent, checkSpam, inspectImageSensitivity } from '../services/moderation';
+import { filterContent, checkSpam, validateImageFile, inspectImageSensitivity } from '../services/moderation';
 import { Language, TRANSLATIONS } from '../data/translations';
 
 interface PhotoFeedProps {
@@ -45,17 +45,24 @@ export const PhotoFeed: React.FC<PhotoFeedProps> = ({
     (r) => selectedDistrict === 'All Districts' || r.district === selectedDistrict
   );
 
-  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
+      reader.onloadend = async () => {
         const result = reader.result as string;
-        setImageUrl(result);
-        const sensitivity = inspectImageSensitivity(file.name);
-        if (sensitivity.isSensitive) {
-          setIsSensitive(true);
+        
+        // Strict Image Content Inspection Blocker
+        const validation = await validateImageFile(file.name, result);
+        if (!validation.isAllowed) {
+          setErrorMsg(validation.reason || 'Upload Blocked: Image contains explicit or sensitive content.');
+          setImageUrl('');
+          e.target.value = '';
+          return;
         }
+
+        setErrorMsg('');
+        setImageUrl(result);
       };
       reader.readAsDataURL(file);
     }
