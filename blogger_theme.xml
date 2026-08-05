@@ -11,14 +11,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet" />
   
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous" />
-  
-  <!-- KeralaHub Official Stitch Dark Glassmorphism Stylesheet (Rain & Dam Update) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Mubthaseem/KERALAHUB@f857404/dist/assets/app.css" />
+  <!-- KeralaHub Blank Slate Stylesheet -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Mubthaseem/KERALAHUB@51dd1ec/dist/assets/app.css" />
 
   <b:skin><![CDATA[
-    body { margin: 0; padding: 0; background: #0b1326; color: #dae2fd; font-family: 'Geist', 'Inter', sans-serif; }
+    body { margin: 0; padding: 0; background: #020617; color: #f8fafc; font-family: 'Inter', sans-serif; }
     #root { width: 100%; min-height: 100vh; }
   ]]></b:skin>
 </head>
@@ -26,8 +23,8 @@
   <!-- KeralaHub Main Root Mount -->
   <div id="root"></div>
 
-  <!-- KeralaHub Official Stitch Dark Glassmorphism Engine (Rain & Dam Update) -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/Mubthaseem/KERALAHUB@f857404/dist/assets/app.js"></script>
+  <!-- KeralaHub Blank Slate Engine -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/Mubthaseem/KERALAHUB@51dd1ec/dist/assets/app.js"></script>
 
   <!-- Required Blogger Hidden Section -->
   <div style="display:none;">
