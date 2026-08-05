@@ -5,7 +5,7 @@ import {
   Activity, ArrowUpRight, Flame, Layers, PhoneCall, Bot, Briefcase, ShoppingBag, 
   Users, ChevronRight, X, Radio, Train, Bus, Zap, Shield, Filter
 } from 'lucide-react';
-import { MazhaFullTracker } from './MazhaFullTracker';
+import { MazhaExactTracker } from './MazhaExactTracker';
 import { InteractiveDisasterMap } from './InteractiveDisasterMap';
 import { PhotoFeed } from './PhotoFeed';
 import { MarketplaceJobs } from './MarketplaceJobs';
@@ -176,7 +176,7 @@ export const AppleGenZEcosystem: React.FC = () => {
       <div className="h-20 sm:h-24"></div>
 
       {/* Active Tab Sub-view Switcher */}
-      {activeTab === 'rain' && <MazhaFullTracker />}
+      {activeTab === 'rain' && <MazhaExactTracker />}
 
       {activeTab === 'map' && (
         <div className="max-w-7xl mx-auto px-4 py-4">
