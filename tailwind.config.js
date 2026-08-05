@@ -8,32 +8,27 @@ export default {
   theme: {
     extend: {
       colors: {
-        "primary": "#68dba9",
-        "primary-container": "#25a475",
-        "on-primary": "#003825",
-        "on-primary-container": "#00311f",
-        "background": "#0b1326",
-        "surface": "#0b1326",
-        "surface-bright": "#31394d",
-        "surface-dim": "#0b1326",
-        "surface-container-lowest": "#060e20",
-        "surface-container-low": "#131b2e",
-        "surface-container": "#171f33",
-        "surface-container-high": "#222a3d",
-        "surface-container-highest": "#2d3449",
-        "surface-variant": "#2d3449",
-        "on-surface": "#dae2fd",
-        "on-surface-variant": "#bccac0",
-        "outline": "#87948b",
-        "outline-variant": "#3d4a42",
-        "error": "#ffb4ab",
-        "error-container": "#93000a",
-        "on-error": "#690005",
-        "secondary": "#4edea3",
-        "secondary-container": "#00a572"
+        background: "#F6F8FB",
+        surface: "#FFFFFF",
+        "surface-soft": "#FAFAFA",
+        "primary-blue": "#0284c7",
+        "emerald-accent": "#059669",
+        "ocean-accent": "#0284c7",
+        "danger-red": "#dc2626",
+        "warning-orange": "#ea580c"
       },
       fontFamily: {
-        sans: ['Geist', 'Inter', 'sans-serif'],
+        sans: ['Geist', 'Inter', 'system-ui', 'sans-serif'],
+      },
+      borderRadius: {
+        '3xl': '24px',
+        '4xl': '32px',
+        '5xl': '40px',
+      },
+      boxShadow: {
+        'apple': '0 20px 40px -15px rgba(0, 0, 0, 0.05), 0 0 1px 1px rgba(0, 0, 0, 0.03)',
+        'apple-hover': '0 30px 60px -12px rgba(0, 0, 0, 0.08), 0 0 1px 1px rgba(0, 0, 0, 0.04)',
+        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
       }
     },
   },
