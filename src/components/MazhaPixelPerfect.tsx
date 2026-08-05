@@ -1,12 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Zap, CloudRain, AlertTriangle, RefreshCw, Locate, Flame, Layers, Maximize2, 
   Search, Heart, MapPin, Shield, Activity, BarChart2, Award, ChevronRight, Moon, Sun
 } from 'lucide-react';
+import { MapContainer, TileLayer, CircleMarker, Popup, Polyline } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 interface MazhaPixelPerfectProps {
   onBackToHub?: () => void;
 }
+
+// Native Kerala District Coordinates
+const KERALA_DISTRICT_COORDS = [
+  { name: 'Thiruvananthapuram', lat: 8.5241, lng: 76.9366, intensity: 'Light Rain', color: '#38bdf8' },
+  { name: 'Kollam', lat: 8.8932, lng: 76.6141, intensity: 'Light Rain', color: '#38bdf8' },
+  { name: 'Pathanamthitta', lat: 9.2648, lng: 76.7870, intensity: 'Moderate', color: '#06b6d4' },
+  { name: 'Alappuzha', lat: 9.4981, lng: 76.3388, intensity: 'Moderate', color: '#06b6d4' },
+  { name: 'Kottayam', lat: 9.5916, lng: 76.5222, intensity: 'Heavy Rain', color: '#f59e0b' },
+  { name: 'Idukki (Cheruthoni)', lat: 9.8500, lng: 76.9667, intensity: 'Torrential', color: '#ef4444' },
+  { name: 'Ernakulam (Kochi)', lat: 9.9816, lng: 76.2999, intensity: 'Light Rain', color: '#38bdf8' },
+  { name: 'Thrissur', lat: 10.5276, lng: 76.2144, intensity: 'Moderate', color: '#06b6d4' },
+  { name: 'Palakkad', lat: 10.7867, lng: 76.6548, intensity: 'Moderate', color: '#06b6d4' },
+  { name: 'Malappuram', lat: 11.0720, lng: 76.0740, intensity: 'Light Rain', color: '#38bdf8' },
+  { name: 'Kozhikode', lat: 11.2588, lng: 75.7804, intensity: 'Heavy Rain', color: '#f59e0b' },
+  { name: 'Wayanad (Chooralmala)', lat: 11.6050, lng: 76.0830, intensity: 'Torrential', color: '#ef4444' },
+  { name: 'Kannur', lat: 11.8745, lng: 75.3704, intensity: 'Moderate', color: '#06b6d4' },
+  { name: 'Kasaragod', lat: 12.5102, lng: 74.9852, intensity: 'Light Rain', color: '#38bdf8' }
+];
 
 export const MazhaPixelPerfect: React.FC<MazhaPixelPerfectProps> = ({ onBackToHub }) => {
   const [activeSideTab, setActiveSideTab] = useState<'live' | 'activity' | 'insights' | 'board'>('live');
@@ -99,16 +120,46 @@ export const MazhaPixelPerfect: React.FC<MazhaPixelPerfectProps> = ({ onBackToHu
       {/* 3. MAIN MAP WORKSPACE */}
       <div className="flex-1 relative flex overflow-hidden">
         
-        {/* Fullscreen Dark Interactive Map Embed */}
-        <div className="absolute inset-0 bg-[#090d16] overflow-hidden">
-          <iframe
-            title="Kerala Map"
-            src="https://www.openstreetmap.org/export/embed.html?bbox=74.85%2C8.25%2C77.55%2C12.85&amp;layer=mapnik"
-            className="w-full h-full border-0 opacity-40 filter invert brightness-90 contrast-125 saturate-50 pointer-events-auto"
-          ></iframe>
+        {/* Native React-Leaflet GIS Map Layer (NO IFRAME!) */}
+        <div className="absolute inset-0 z-0">
+          <MapContainer
+            center={[10.5, 76.25]}
+            zoom={8}
+            scrollWheelZoom={true}
+            style={{ width: '100%', height: '100%', background: '#090d16' }}
+            zoomControl={false}
+          >
+            {/* Dark Matter CartoDB GIS Tiles (Native High Performance, NO IFRAME!) */}
+            <TileLayer
+              attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            />
 
-          {/* Overlay Grid Contours for Kerala Boundary effect */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#070e1a] via-transparent to-[#070e1a]/80 pointer-events-none"></div>
+            {/* Native District Rain Markers */}
+            {KERALA_DISTRICT_COORDS.map((dist, idx) => (
+              <CircleMarker
+                key={idx}
+                center={[dist.lat, dist.lng]}
+                radius={dist.intensity === 'Torrential' ? 12 : dist.intensity === 'Heavy Rain' ? 10 : 7}
+                pathOptions={{
+                  fillColor: dist.color,
+                  fillOpacity: 0.8,
+                  color: dist.color,
+                  weight: 2
+                }}
+              >
+                <Popup className="custom-popup">
+                  <div className="p-1 text-slate-900 font-sans">
+                    <p className="font-bold text-xs">{dist.name}</p>
+                    <p className="text-[10px] text-slate-600">Status: {dist.intensity}</p>
+                  </div>
+                </Popup>
+              </CircleMarker>
+            ))}
+          </MapContainer>
+
+          {/* Gradient Overlay for Sleek Mazha Dark Aesthetic */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#070e1a] via-transparent to-[#070e1a]/60 pointer-events-none z-10"></div>
         </div>
 
         {/* LEFT FLOATING PANEL (KERALA RAIN NETWORK) */}
@@ -133,7 +184,7 @@ export const MazhaPixelPerfect: React.FC<MazhaPixelPerfectProps> = ({ onBackToHu
                 <p className="text-[9px] text-slate-400 font-bold uppercase">ACTIVE</p>
               </div>
               <div className="bg-[#101a2d] border border-slate-800 p-2 rounded-lg">
-                <p className="text-base font-black text-white">0</p>
+                <p className="text-base font-black text-white">14</p>
                 <p className="text-[9px] text-slate-400 font-bold uppercase">DISTRICTS</p>
               </div>
               <div className="bg-[#101a2d] border border-slate-800 p-2 rounded-lg">
