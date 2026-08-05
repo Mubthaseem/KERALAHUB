@@ -11,8 +11,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet" />
   
-  <!-- KeralaHub Weather Portal Official White Govt Stylesheet -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Mubthaseem/KERALAHUB@16e13f5/dist/assets/app.css" />
+  <!-- KeralaHub Official Home Screen Portal Grid Stylesheet -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Mubthaseem/KERALAHUB@c8a9149/dist/assets/app.css" />
 
   <b:skin><![CDATA[
     body { margin: 0; padding: 0; background: #f8fafc; color: #0f172a; font-family: 'Inter', sans-serif; }
@@ -23,8 +23,8 @@
   <!-- KeralaHub Main Root Mount -->
   <div id="root"></div>
 
-  <!-- KeralaHub Weather Portal Official White Govt Engine -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/Mubthaseem/KERALAHUB@16e13f5/dist/assets/app.js"></script>
+  <!-- KeralaHub Official Home Screen Portal Grid Engine -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/Mubthaseem/KERALAHUB@c8a9149/dist/assets/app.js"></script>
 
   <!-- Required Blogger Hidden Section -->
   <div style="display:none;">
