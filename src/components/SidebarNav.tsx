@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Compass, Users, ShoppingBag, Briefcase, AlertTriangle, Bot, Settings, HelpCircle, ShieldAlert } from 'lucide-react';
+import { Home, Compass, Users, ShoppingBag, Briefcase, AlertTriangle, Bot, Settings, HelpCircle, ShieldAlert, CloudRain } from 'lucide-react';
 
 interface SidebarNavProps {
   activeTab: string;
@@ -54,6 +54,19 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
         >
           <Compass className="w-5 h-5" />
           <span>Live Satellite Map</span>
+        </button>
+
+        {/* Live Rain & Dam Tracker (Mazha.live) */}
+        <button
+          onClick={() => onSelectTab('rain')}
+          className={`w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl transition ${
+            activeTab === 'rain'
+              ? 'bg-secondary-container text-on-secondary-container font-bold shadow-sm'
+              : 'text-on-surface-variant hover:bg-surface-variant/40 hover:text-on-surface'
+          }`}
+        >
+          <CloudRain className="w-5 h-5 text-blue-400" />
+          <span>Live Rain & Dam Storage</span>
         </button>
 
         {/* Communities / Forums */}

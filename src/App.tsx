@@ -18,6 +18,7 @@ import { EventsTourism } from './components/EventsTourism';
 import { AdminDashboard } from './components/AdminDashboard';
 import { AIAssistant } from './components/AIAssistant';
 import { UserProfileModal } from './components/UserProfileModal';
+import { RainDamTracker } from './components/RainDamTracker';
 
 export const App: React.FC = () => {
   const {
@@ -126,6 +127,10 @@ export const App: React.FC = () => {
                 currentUser={currentUser}
                 onOpenAuthModal={() => setIsAuthModalOpen(true)}
               />
+            )}
+
+            {activeTab === 'rain' && (
+              <RainDamTracker selectedDistrict={selectedDistrict} />
             )}
 
             {activeTab === 'jobs' && (

@@ -31,17 +31,17 @@ export function useEmergencyStore() {
     return saved ? JSON.parse(saved) : INITIAL_FORUM_POSTS;
   });
 
-  const getInitialTab = (): 'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'ai' | 'profile' | 'admin' => {
+  const getInitialTab = (): 'map' | 'feed' | 'rain' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'ai' | 'profile' | 'admin' => {
     const hash = window.location.hash.replace('#/', '').replace('#', '');
-    const validTabs = ['map', 'feed', 'jobs', 'events', 'camps', 'forums', 'contacts', 'ai', 'profile', 'admin'];
+    const validTabs = ['map', 'feed', 'rain', 'jobs', 'events', 'camps', 'forums', 'contacts', 'ai', 'profile', 'admin'];
     return validTabs.includes(hash) ? (hash as any) : 'feed';
   };
 
   const [selectedDistrict, setSelectedDistrict] = useState<DistrictName>('All Districts');
-  const [activeTab, setActiveTabState] = useState<'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'ai' | 'profile' | 'admin'>(getInitialTab);
+  const [activeTab, setActiveTabState] = useState<'map' | 'feed' | 'rain' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'ai' | 'profile' | 'admin'>(getInitialTab);
   const [language, setLanguage] = useState<'en' | 'ml'>('en');
 
-  const setActiveTab = (tab: 'map' | 'feed' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'ai' | 'profile' | 'admin') => {
+  const setActiveTab = (tab: 'map' | 'feed' | 'rain' | 'jobs' | 'events' | 'camps' | 'forums' | 'contacts' | 'ai' | 'profile' | 'admin') => {
     setActiveTabState(tab);
     window.location.hash = `#/${tab}`;
   };
